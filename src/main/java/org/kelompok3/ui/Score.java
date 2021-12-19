@@ -110,7 +110,7 @@ public class Score extends JFrame {
         }
 
         //---- backBtn ----
-        backBtn.setText("BACK");
+        backBtn.setText("KEMBALI");
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -123,8 +123,8 @@ public class Score extends JFrame {
                                                 .addComponent(scrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(contentPaneLayout.createSequentialGroup()
                                                 .addGap(40, 40, 40)
-                                                .addComponent(backBtn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-                                                .addGap(210, 210, 210)
+                                                .addComponent(backBtn, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(190, 190, 190)
                                                 .addComponent(label1, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)))
                                 .addGap(173, 173, 173))
         );

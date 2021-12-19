@@ -1,6 +1,7 @@
 package org.kelompok3.ui;
 
 import org.kelompok3.Utils;
+import org.springframework.boot.SpringApplication;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +32,8 @@ public class Launcher extends JFrame {
         web.addActionListener(e -> {
             if (Desktop.isDesktopSupported()) {
                 try {
-                    var url = "http://127.0.0.1:8585";
+                    SpringApplication.run(ServerApp.class);
+                    var url = "http://127.0.0.1:8080/congklak";
                     //Desktop.getDesktop().browse(new URI(url));
                     Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url).waitFor();
                     this.dispose();

@@ -106,7 +106,6 @@ public class Computer extends Player {
                             setHistory(start, seedInHand);
                             next(nodes, start + 1);
                             seedInHand = 0;
-                            addedPoint = 0;
 
                             // if last node is Big Hole
                             // then set into solution
@@ -116,11 +115,11 @@ public class Computer extends Player {
                             deep++;
                         }
                     }
-                    // if previous node doesn't have solution
-                    // then take another node
-                    if (!solution.hasSolution()) {
-                        backtracking(nodes, ++i);
-                    }
+                }
+                // if previous node doesn't have solution
+                // then take another node
+                if (!solution.hasSolution()) {
+                    backtracking(nodes, ++i);
                 }
             }
         }
@@ -134,10 +133,10 @@ public class Computer extends Player {
                 cek = true;
                 doShoot = true;
                 //do "Shoot" here
-                addedPoint += firstNode.addPoint(1 + lastNode.getCrossNode(nodes).takeSeed());
+                firstNode.addPoint(1 + lastNode.getCrossNode(nodes).takeSeed());
             } else {
                 if (lastNode.isBigHole()) {
-                    addedPoint += firstNode.addPoint(1);
+                    firstNode.addPoint(1);
                     if (seedInHand == 1) {
                         cek = true;
                     }
@@ -152,7 +151,6 @@ public class Computer extends Player {
                 addHistory(i);
             }
         }
-
 
         private void previous(List<Hole> nodes, int i) {
             if (i < 0) {
