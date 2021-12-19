@@ -29,7 +29,7 @@ public class Setting extends JFrame {
             if (result.next()) {
                 State.setPlayerName(result.getString("player_name"));
                 State.setEnableBgm(result.getBoolean("bgm_enabled"));
-                State.setEnableSfx(result.getBoolean("bgm_enabled"));
+                State.setEnableSfx(result.getBoolean("sfx_enabled"));
             } else {
                 // insert data setting for the first time
                 DBConnector.initSetting();
@@ -73,8 +73,19 @@ public class Setting extends JFrame {
                 }
             }
         });
-        bgm.addActionListener(e -> State.setEnableBgm(bgm.isSelected()));
-        sfx.addActionListener(e -> State.setEnableSfx(sfx.isSelected()));
+        bgm.addActionListener(e -> {
+            State.setEnableBgm(bgm.isSelected());
+            if (bgm.isSelected()){
+                Utils.playSound();
+            }else {
+                Utils.stopSound();
+            }
+            DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
+        });
+        sfx.addActionListener(e -> {
+            State.setEnableSfx(sfx.isSelected());
+            DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
+        });
     }
 
     private void initComponents() {

@@ -79,7 +79,7 @@ public class Board extends JFrame {
     private void checkAllHole() {
         var computerSkor = State.getComputerPlayer().bigHole.totalSeed();
         var humanSkor = State.getHumanPLayer().bigHole.totalSeed();
-        if ((computerSkor + humanSkor) == 49) {
+        if ((computerSkor + humanSkor) == 98) {
             var score = computerSkor;
             var name = "Komputer";
             var status = Status.MENANG;

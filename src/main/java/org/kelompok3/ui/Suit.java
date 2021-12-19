@@ -26,8 +26,6 @@ public class Suit extends JFrame {
         initComponents();
         initListener();
         initWorker();
-        Utils.initAudioPlayer();
-        Utils.playSound();
         task.doJob(1, false);
     }
 
@@ -46,7 +44,6 @@ public class Suit extends JFrame {
     }
 
     private void initPlayer() {
-        /*
         List<LittleHole> cHole = new ArrayList<>();
         List<LittleHole> pHole = new ArrayList<>();
         var x = 0;
@@ -61,24 +58,6 @@ public class Suit extends JFrame {
 
         State.setHumanPLayer(new Human(2, pHole, pBigHole));
         State.setComputerPlayer(new Computer(1, cHole, cBigHole));
-*/
-
-        java.util.List<LittleHole> cHoles = new ArrayList<>();
-        java.util.List<LittleHole> pHoles = new ArrayList<>();
-        for (int i = 7; i >= 1; i--) {
-            cHoles.add(new LittleHole("C-" + i, i, 0));
-            pHoles.add(new LittleHole("P-" + i, i));
-        }
-
-        var cBigHole = new BigHole("C-L");
-        var pBigHole = new BigHole("P-L");
-
-        State.setHumanPLayer(new Human(2, pHoles, pBigHole));
-        State.setComputerPlayer(new Computer(1, cHoles, cBigHole));
-        //State.setCurrentTurn(1);
-
-        //Utils.initTheme();
-        //new Board();
     }
 
     private void checkWinner() {
@@ -127,7 +106,7 @@ public class Suit extends JFrame {
         }
 
         if (winnerId != null) {
-            State.setCurrentTurn(1);
+            State.setCurrentTurn(winnerId);
             task.doJob(0, true);
         }
     }
