@@ -163,7 +163,7 @@ public final class Utils {
 
     public static void initAudioPlayer(){
         if (sound == null) {
-            sound = initAudioPlayer("backsound.m4a", true);
+            sound = initAudioPlayer("bgm.wav", true);
         }
         if (sfxDown == null) {
             sfxDown = initAudioPlayer("sfx_down.wav", false);
@@ -272,7 +272,7 @@ public final class Utils {
                 null, null, null);
     }
 
-    public static int infoMessage(@NotNull Component parent, String msg) {
+    public static int infoMessage( Component parent, String msg) {
         return JOptionPane.showOptionDialog(parent, msg, "Info",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, null, null);

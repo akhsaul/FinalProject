@@ -15,6 +15,7 @@ import java.awt.*;
  */
 public class MainGUI extends JFrame {
     public MainGUI() {
+        Setting.prepareAll();
         initComponents();
         initListener();
     }

@@ -17,6 +17,11 @@ import java.util.regex.Pattern;
  */
 public class Setting extends JFrame {
     public Setting() {
+        initComponents();
+        initListener();
+    }
+
+    public static void prepareAll(){
         try {
             // check if the database has data setting or not
             var result = DBConnector.getSetting();
@@ -35,8 +40,6 @@ public class Setting extends JFrame {
             // always close
             DBConnector.closeStatement();
         }
-        initComponents();
-        initListener();
     }
 
     private void initListener() {

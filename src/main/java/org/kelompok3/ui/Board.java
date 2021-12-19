@@ -19,47 +19,24 @@ import java.util.List;
  * @author georgeriv
  */
 public class Board extends JFrame {
-    private static Hole firstNode;
     private static Hole lastNode;
-    private static Timer timer = null;
+    private boolean RUNNING = false;
     private static int seedInHand = 0;
     List<Hole> nodes = new ArrayList<>();
 
     public Board() {
         initComponents();
         initListener();
-        Utils.initAudioPlayer();
         initNodes();
         play();
     }
 
-    public static void main(String[] args) {
-        java.util.List<LittleHole> cHoles = new ArrayList<>();
-        java.util.List<LittleHole> pHoles = new ArrayList<>();
-        for (int i = 7; i >= 1; i--) {
-            cHoles.add(new LittleHole("C-" + i, i, 0));
-            pHoles.add(new LittleHole("P-" + i, i));
-        }
-
-        var cBigHole = new BigHole("C-L");
-        var pBigHole = new BigHole("P-L");
-
-        State.setHumanPLayer(new Human(2, pHoles, pBigHole));
-        State.setComputerPlayer(new Computer(1, cHoles, cBigHole));
-        State.setCurrentTurn(1);
-
-        Utils.initTheme();
-        new Board();
-    }
-
-    private boolean RUNNING = false;
 
     private void simulate(Hole hole) {
         if (!RUNNING) {
-            firstNode = hole;
-            if (!firstNode.seedIsEmpty()) {
-                seedInHand = firstNode.takeSeed(true);
-                next(nodes, nodes.indexOf(firstNode) + 1);
+            if (!hole.seedIsEmpty()) {
+                seedInHand = hole.takeSeed(true);
+                next(nodes, nodes.indexOf(hole) + 1);
 
                 RUNNING = false;
                 if (lastNode.isBigHole()) {
@@ -164,9 +141,9 @@ public class Board extends JFrame {
         if (!lastNode.isBigHole() && lastNode.seedIsEmpty() && seedInHand == 1) {
             var stealSeed = false;
             if (State.isComputerTurn()) {
-                stealSeed = State.getComputerPlayer().littleHole.contains(lastNode);
+                stealSeed = State.getComputerPlayer().littleHole.contains((LittleHole) lastNode);
             } else {
-                stealSeed = State.getHumanPLayer().littleHole.contains(lastNode);
+                stealSeed = State.getHumanPLayer().littleHole.contains((LittleHole) lastNode);
             }
             if (stealSeed) {
                 //do "Shoot" here
@@ -294,7 +271,7 @@ public class Board extends JFrame {
         {
 
             //---- playerName ----
-            playerName.setText("Pemain");
+            playerName.setText(State.getPlayerName());
             playerName.setFont(new Font("Comic Sans MS", playerName.getFont().getStyle(), 18));
             playerName.setHorizontalAlignment(SwingConstants.CENTER);
             playerName.setForeground(Color.black);
