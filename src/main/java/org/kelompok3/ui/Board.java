@@ -3,6 +3,7 @@ package org.kelompok3.ui;
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
 import org.kelompok3.core.*;
+import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -29,8 +30,26 @@ public class Board extends JFrame {
         initListener();
         Utils.initAudioPlayer();
         initNodes();
-
         play();
+    }
+
+    public static void main(String[] args) {
+        java.util.List<LittleHole> cHoles = new ArrayList<>();
+        java.util.List<LittleHole> pHoles = new ArrayList<>();
+        for (int i = 7; i >= 1; i--) {
+            cHoles.add(new LittleHole("C-" + i, i, 0));
+            pHoles.add(new LittleHole("P-" + i, i));
+        }
+
+        var cBigHole = new BigHole("C-L");
+        var pBigHole = new BigHole("P-L");
+
+        State.setHumanPLayer(new Human(2, pHoles, pBigHole));
+        State.setComputerPlayer(new Computer(1, cHoles, cBigHole));
+        State.setCurrentTurn(1);
+
+        Utils.initTheme();
+        new Board();
     }
 
     private boolean RUNNING = false;
@@ -38,17 +57,18 @@ public class Board extends JFrame {
     private void simulate(Hole hole) {
         if (!RUNNING) {
             firstNode = hole;
-            seedInHand = firstNode.takeSeed(true);
-            next(nodes, nodes.indexOf(firstNode) + 1);
+            if (!firstNode.seedIsEmpty()) {
+                seedInHand = firstNode.takeSeed(true);
+                next(nodes, nodes.indexOf(firstNode) + 1);
 
-            RUNNING = false;
-            if (lastNode.isBigHole()) {
-                play();
-            } else if (lastNode.totalSeed() <= 1) {
-                System.out.println("change turn");
-                changeTurn();
-            } else if (!lastNode.seedIsEmpty()) {
-                simulate(lastNode);
+                RUNNING = false;
+                if (lastNode.isBigHole()) {
+                    play();
+                } else if (lastNode.totalSeed() <= 1) {
+                    changeTurn();
+                } else if (!lastNode.seedIsEmpty()) {
+                    simulate(lastNode);
+                }
             }
         }
     }
@@ -79,13 +99,59 @@ public class Board extends JFrame {
         }
     }
 
+    private void checkAllHole() {
+        var computerSkor = State.getComputerPlayer().bigHole.totalSeed();
+        var humanSkor = State.getHumanPLayer().bigHole.totalSeed();
+        if ((computerSkor + humanSkor) == 49) {
+            var score = computerSkor;
+            var name = "Komputer";
+            var status = Status.MENANG;
+            if (computerSkor == humanSkor){
+                status = Status.SERI;
+            }else if (computerSkor > humanSkor) {
+                status = Status.KALAH;
+                State.setWinner(State.getComputerPlayer());
+            } else {
+                score = humanSkor;
+                name = State.getPlayerName();
+                State.setWinner(State.getComputerPlayer());
+            }
+
+            if (status == Status.SERI){
+                Utils.infoMessage(this, "Permainan Selesai. Hasilnya adalah SERI");
+            } else {
+                Utils.infoMessage(this, "Permainan Selesai. Pemenang adalah " + name);
+            }
+
+            DBConnector.saveScore(State.getPlayerID(), score, status);
+            new Score();
+            this.dispose();
+        }
+    }
+
     private void play() {
-        if (State.isComputerTurn()) {
-            Utils.warnMessage(this, "Sekarang, Kesempatan Komputer");
-            var solution = State.getComputerPlayer().getSolution(nodes);
-            simulate(solution.getHole());
-        } else {
-            Utils.warnMessage(this, "Sekarang, Kesempatan " + State.getPlayerName());
+        checkAllHole();
+        if (!State.hasWinner()) {
+            if (State.isComputerTurn()) {
+                Utils.infoMessage(this, "Sekarang, Kesempatan Komputer");
+                var solution = State.getComputerPlayer().getSolution(nodes);
+                if (solution.hasSolution()) {
+                    simulate(solution.getHole());
+                } else {
+                    changeTurn();
+                }
+            } else {
+                // check if human player don't have seed anymore
+                var seedLeft = 0;
+                for (LittleHole littleHole : State.getHumanPLayer().littleHole) {
+                    seedLeft += littleHole.totalSeed();
+                }
+                if (seedLeft != 0) {
+                    Utils.infoMessage(this, "Sekarang, Kesempatan " + State.getPlayerName());
+                } else {
+                    changeTurn();
+                }
+            }
         }
     }
 

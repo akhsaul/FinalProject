@@ -16,7 +16,6 @@ import java.awt.*;
  * @author georgeriv
  */
 public class Score extends JFrame {
-    private static int playerID = -1;
     public Score() {
         initComponents();
         initListener();
@@ -29,7 +28,6 @@ public class Score extends JFrame {
             DefaultTableModel model = (DefaultTableModel) table1.getModel();
 
             while (result.next()) {
-                playerID = result.getInt("player_id");
                 var name = result.getString("player_name");
                 var score = result.getInt("score");
                 var status = result.getString("status");

@@ -2,17 +2,32 @@ package org.kelompok3.core;
 
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
+import org.kelompok3.database.DBConnector;
 
 @SuppressWarnings("unused")
 public final class State {
     private static String playerName = "Pemain";
+    private static Integer playerID = null;
     private static Human human = null;
     private static Computer computer = null;
     private static Integer currentTurn = null;
     private static boolean enableBgm = true;
     private static boolean enableSfx = true;
+    private static Player winner = null;
 
     private State() {
+    }
+
+    public static synchronized void setWinner(Player player){
+        winner = player;
+    }
+
+    public static synchronized Player getWinner(){
+        return winner;
+    }
+
+    public static synchronized boolean hasWinner(){
+        return winner != null;
     }
 
     public static synchronized void setCurrentTurn(int playerId) {
@@ -70,4 +85,21 @@ public final class State {
     public static synchronized String getPlayerName(){return playerName;}
 
     public static synchronized void setPlayerName(@NotNull String name){playerName = name;}
+
+    /**
+     * only for saving score
+     * */
+    public static Integer getPlayerID(){
+        if (playerID == null) {
+            var result = DBConnector.getSetting();
+            try {
+                while (result.next()) {
+                    playerID = result.getInt("player_id");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return Utils.notNull(playerID);
+    }
 }
