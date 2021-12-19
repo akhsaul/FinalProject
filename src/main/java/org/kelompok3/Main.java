@@ -1,38 +1,43 @@
 package org.kelompok3;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.kelompok3.core.*;
+
 import java.awt.*;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        if(Desktop.isDesktopSupported()){
+        if (Desktop.isDesktopSupported()) {
             try {
                 var url = "http://127.0.0.1:8585";
                 //Desktop.getDesktop().browse(new URI(url));
                 //Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url).waitFor();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        List<Whole> wholeList1 = new ArrayList<>();
-        List<Whole> wholeList2 = new ArrayList<>();
+        List<LittleHole> wholeList1 = new ArrayList<>();
+        List<LittleHole> wholeList2 = new ArrayList<>();
 
-        wholeList1.add(new Whole("C-7", Whole.Type.COMPUTER, 15));
-        wholeList1.add(new Whole("C-6", Whole.Type.COMPUTER, 0));
-        wholeList1.add(new Whole("C-5", Whole.Type.COMPUTER, 8));
-        wholeList1.add(new Whole("C-4", Whole.Type.COMPUTER, 0));
-        wholeList1.add(new Whole("C-3", Whole.Type.COMPUTER, 5));
-        wholeList1.add(new Whole("C-2", Whole.Type.COMPUTER, 5));
-        wholeList1.add(new Whole("C-1", Whole.Type.COMPUTER, 3));
-        wholeList2.add(new Whole("P-7", Whole.Type.HUMAN, 0));
-        wholeList2.add(new Whole("P-6", Whole.Type.HUMAN, 5));
-        wholeList2.add(new Whole("P-5", Whole.Type.HUMAN, 3));
-        wholeList2.add(new Whole("P-4", Whole.Type.HUMAN, 4));
-        wholeList2.add(new Whole("P-3", Whole.Type.HUMAN, 12));
-        wholeList2.add(new Whole("P-2", Whole.Type.HUMAN, 4));
-        wholeList2.add(new Whole("P-1", Whole.Type.HUMAN, 2));
+        /*
+        wholeList1.add(new LittleHole("C-7", 15));
+        wholeList1.add(new LittleHole("C-6", 0));
+        wholeList1.add(new LittleHole("C-5", 8));
+        wholeList1.add(new LittleHole("C-4", 0));
+        wholeList1.add(new LittleHole("C-3", 5));
+        wholeList1.add(new LittleHole("C-2", 5));
+        wholeList1.add(new LittleHole("C-1", 3));
+        wholeList2.add(new LittleHole("P-7", 0));
+        wholeList2.add(new LittleHole("P-6", 5));
+        wholeList2.add(new LittleHole("P-5", 3));
+        wholeList2.add(new LittleHole("P-4", 4));
+        wholeList2.add(new LittleHole("P-3", 12));
+        wholeList2.add(new LittleHole("P-2", 4));
+        wholeList2.add(new LittleHole("P-1", 2));
+         */
 
         /*
         for (int i = 7; i >= 1; i--) {
@@ -41,26 +46,41 @@ public class Main {
         }
          */
 
-        var bigWhole1 = new Whole("C-L", Whole.Type.COMPUTER, 32, Whole.Size.BIG);
-        var bigWhole2 = new Whole("P-L", Whole.Type.HUMAN, 0, Whole.Size.BIG);
+        var bigWhole1 = new BigHole("C-L");
+        var bigWhole2 = new BigHole("P-L");
 
+        var objectMapper = new ObjectMapper();
+
+        try {
+            var data = objectMapper.writeValueAsString(wholeList1);
+            System.out.println(data);
+            List<LittleHole> list = objectMapper.readValue(data, new TypeReference<>() {});
+            System.out.println(list);
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+        System.exit(0);
+
+        new Computer(1, wholeList1, bigWhole1);
         // computer player
-        var player1 = new Player(1, wholeList1, bigWhole1);
+        var player1 = new Computer(1, wholeList1, bigWhole1);
         // human player
-        var player2 = new Player(2, wholeList2, bigWhole2);
+        var player2 = new Human(2, wholeList2, bigWhole2);
 
-        List<Whole> nodes = new ArrayList<>();
+        player1.getSolution(player2.littleHole);
+
+        /*
+        List<Hole> nodes = new ArrayList<>();
         // include all littleWhole and bigWhole has by computer player
-        nodes.addAll(player1.wholeList);
+        nodes.addAll(player1.holeList());
         // exclude bigWhole has by human player
         nodes.addAll(player2.littleWhole);
 
         // start backtracking
-        var b = new Bot();
-        b.backtracking(nodes);
-        if(b.solution.hasSolution()){
+        Solution computer = player1.getSolution(nodes);
+        if(computer.hasSolution()){
             System.out.println("SOLUTION");
-            System.out.println(b.solution.getWhole());
-        }
+            System.out.println(computer.getHole());
+        }*/
     }
 }

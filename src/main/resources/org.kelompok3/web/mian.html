@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>contoh</title>
+</head>
+<body>
+ <canvas id="myCanvas" width="820" height="285	" style="border:2px solid salmon;">
+</canvas>
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+const img = new Image();
+img.src = "https://www.w3schools.com/graphics/pic_the_scream.jpg";
+var pat = ctx.createPattern(img, "no-repeat");
+ctx.arc(60, 135, 50, 40, 40 * Math.PI);
+ctx.fillStyle = pat;
+ctx.fill();
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(150, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(150, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(250, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(250, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(350, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(350, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(450, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(450, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(550, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(550, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(650, 80, 40, 50, 20 * Math.PI);
+ctx.stroke();
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(650, 200, 40, 50, 20 * Math.PI);
+ctx.stroke();
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.beginPath();
+ctx.arc(750, 135, 50, 40, 40 * Math.PI);
+ctx.stroke();
+</script> 
+</body>
+</html>

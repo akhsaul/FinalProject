@@ -8,7 +8,7 @@ plugins {
 group 'org.kelompok3'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = '17'
+sourceCompatibility = '15'
 
 configurations {
     compileOnly {
@@ -23,28 +23,33 @@ repositories {
 
 application {
     mainModule = 'org.kelompok3'
-    mainClass = 'org.kelompok3.Launcher'
+    mainClass = 'org.kelompok3.ui.Launcher'
 }
 
 dependencies {
+    // for desktop
     implementation 'com.formdev:flatlaf:1.6.5'
     implementation 'com.formdev:flatlaf-extras:1.6.5'
     implementation 'com.formdev:flatlaf-swingx:1.6.5'
     implementation 'com.formdev:flatlaf-intellij-themes:1.6.5'
     implementation fileTree(include: ['*.jar'], dir: 'lib')
+    implementation 'uk.co.caprica:vlcj:4.7.1'
 
+    // for web
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.session:spring-session-core'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'mysql:mysql-connector-java'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // general
     implementation 'org.jetbrains:annotations:22.0.0'
+    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }

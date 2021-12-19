@@ -1,0 +1,32 @@
+Permainan congklak memiliki beberapa aturan yang harus dipatuhi, yaitu:
+
+1. Awal permainan, setiap lubang kecil di isi dengan biji sebanyak 7 buah.
+2. Sebelum permainan dimulai, para pemain harus melakukan suit (cara mengundi untuk 2 orang
+    dengan cara mengadu jari untuk menentukan siapa yang menang) untuk menentukan siapa
+    yang memiliki kesempatan pertama.
+3. Pemain yang mendapatkan kesempatan pertama, dapat memilih lubang yang akan dijalankan
+    dengan mengambil semua biji pada salah satu lubang, lalu satu persatu biji yang berada
+    di tangan harus dimasukkan ke dalam masing-masing lubang sesuai dengan arah jarum jam,
+    tetapi lubang besar milik lawan tidak boleh diisi, hanya lubang kecil dan lubang besar
+    milik sendiri.
+4. Kesempatan pemain akan terus berlanjut jika memenuhi kondisi berikut:
+    a. Jika biji di tangan pemain habis di lubang besar milik sendiri maka pemain tersebut dapat
+        melanjutkan kesempatan pemain tersebut belum berakhir, pemain dapat memilih lubang kecil
+        yang berjajar dengan lubang yang dipilih sebelumnya.
+    b. Jika biji di tangan pemain habis di lubang kecil, lalu didalam lubang tersebut berisi biji
+        yang lain (bukan biji yang baru saja dimasukkan), maka kesempatan pemain tersebut
+        belum berakhir. Pemain dapat mengambil biji pada lubang kecil tersebut lalu memasukkan
+        satu persatu ke lubang kecil lainnya.
+5. Kesempatan pemain akan berakhir jika memenuhi kondisi berikut:
+    a. Jika biji di tangan pemain habis di lubang kecil, lalu di dalam lubang tersebut tidak berisi biji lain
+        (bukan biji yang baru saja dimasukkan), maka kesempatan pemain tersebut berakhir.
+6. Proses "tembak" akan terjadi jika memenuhi kondisi berikut:
+    a. Jika biji di tangan pemain habis di lubang kecil milik daerah sendiri dan terdapat biji milik lawan
+        di depan lubang tersebut, maka pemain dapat melakukan proses "tembak".
+        Proses "tembak" adalah mengambil semua biji yang berada di depannya (garis vertikal).
+        Jika terdapat biji maka pemain bisa mengambil semua biji tersebut, tetapi jika kosong maka
+        pemain tidak dapat melakukan proses ini.
+7. Permainan selesai jika tidak terdapat biji di setiap lubang kecil.
+8. Salah satu pemain dapat di nyatakan sebagai pemenang jika pemain tersebut memiliki jumlah biji
+    yang berada di lubang besar milik sendiri lebih banyak dari jumlah biji yang berada
+    di lubang besar milik lawan.
