@@ -32,27 +32,25 @@ public class DBConnector {
 
                 // make database
                 var sql = "create database if not exists " + dbName;
-                statement.addBatch(sql);
+                statement.execute(sql);
 
                 // make table "setting"
                 sql = "create table if not exists " + dbName + "." + tbSetting +
-                        " (`player_name` varchar(9) not null primary key ," +
-                        "`bgm_enabled` enum('TRUE','FALSE') not null ," +
-                        "`sfx_enabled` enum('TRUE','FALSE') not null)";
-                statement.addBatch(sql);
+                        " (`player_id` int not null auto_increment primary key ," +
+                        "`player_name` varchar(9) not null," +
+                        "`bgm_enabled` BOOLEAN not null ," +
+                        "`sfx_enabled` BOOLEAN not null)";
+                statement.execute(sql);
 
                 // make table "score"
-                sql = "create table if not exists " + dbName + "." + tbScore +
-                        " (`id_score` int not null auto_increment primary key," +
-                        "`player_name` varchar(9) not null ," +
-                        "`score` int not null ," +
-                        "`status` enum('Menang','Kalah','Seri') not null, index (`player_name`))";
-                statement.addBatch(sql);
-
-                // make relation
-                sql = "alter table " + dbName + "." + tbScore + " add foreign key (`player_name`) references " + dbName + "." + tbSetting + "(`player_name`)" +
-                        " on delete cascade on update cascade ";
-                statement.addBatch(sql);
+                sql = "create table if not exists congklak.score(\n" +
+                        "    `id_score` int not null auto_increment primary key,\n" +
+                        "    `player_id` int not null,\n" +
+                        "    `score` int not null ,\n" +
+                        "    `status` enum('Menang','Kalah','Seri') not null,\n" +
+                        "    FOREIGN KEY(`player_id`) REFERENCES setting(`player_id`)\n" +
+                        ")";
+                statement.execute(sql);
 
                 // close all
                 statement.close();
@@ -112,7 +110,7 @@ public class DBConnector {
         }
     }
 
-    public static void saveScore(String playerName, int score, Status status) {
+    public static void saveScore(int playerID, int score, Status status) {
         connect();
         try {
             String stats = "";
@@ -122,8 +120,8 @@ public class DBConnector {
                 case KALAH -> stats = "Kalah";
             }
 
-            var sql = "insert into " + tbScore + " (`id_score`, `player_name`, `score`, `status`)" +
-                    " values (null, '" + playerName + "', '" + score + "', '" + stats + "')";
+            var sql = "insert into " + tbScore + " (`id_score`, `player_id`, `score`, `status`)" +
+                    " values (null, '" + playerID + "', '" + score + "', '" + stats + "')";
             var statement = connection.createStatement();
             statement.execute(sql);
             statement.close();
@@ -133,25 +131,29 @@ public class DBConnector {
     }
 
     public static @NotNull ResultSet getScore() {
-        return get(tbScore, "");
-    }
-
-    public static @NotNull ResultSet getSetting() {
-        return get(tbSetting, " LIMIT 1");
-    }
-
-    private static synchronized @NotNull ResultSet get(String table, String additional) {
         connect();
-
         ResultSet resultSet = null;
         try {
-            var sql = "SELECT * FROM " + table + additional;
+            var sql ="SELECT `setting`.`player_id`, `setting`.`player_name`, `score`.`score`, `score`.`status` FROM score" +
+                    " INNER JOIN setting ON score.player_id = setting.player_id;";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return Utils.notNull(resultSet);
+    }
 
+    public static @NotNull ResultSet getSetting() {
+        connect();
+        ResultSet resultSet = null;
+        try {
+            var sql = "SELECT * FROM " + tbSetting + " LIMIT 1";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Utils.notNull(resultSet);
     }
 

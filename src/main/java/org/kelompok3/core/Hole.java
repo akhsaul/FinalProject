@@ -35,6 +35,7 @@ public abstract class Hole {
 
     public void setLabel(@NotNull JLabel holeLabel) {
         label = holeLabel;
+        changeImg();
     }
 
     public void clearPoint(){

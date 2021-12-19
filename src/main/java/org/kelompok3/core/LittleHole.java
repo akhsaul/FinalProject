@@ -17,6 +17,7 @@ public class LittleHole extends Hole {
         button = holeBtn;
         this.x = x;
         this.y = y;
+        changeImg();
     }
 
     public int getX(){

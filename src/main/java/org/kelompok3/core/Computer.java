@@ -36,13 +36,7 @@ public class Computer extends Player {
         return hasMove;
     }
 
-    public Solution getSolution(List<LittleHole> playerLittleHole){
-        List<Hole> nodes = new ArrayList<>();
-        // include all littleWhole and bigWhole has by computer player
-        nodes.addAll(holeList());
-        // exclude bigWhole has by human player
-        nodes.addAll(playerLittleHole);
-
+    public Solution getSolution(@NotNull List<Hole> nodes){
         // start backtracking
         BOT.backtracking(nodes);
         return BOT.solution;
@@ -69,8 +63,8 @@ public class Computer extends Player {
 
         private final LinkedList<List<Integer>> history = new LinkedList<>();
 
-        private Hole firstNode;
-        private Hole lastNode;
+        private Hole firstNode = null;
+        private Hole lastNode = null;
 
         private void backtracking(@NotNull List<Hole> nodes) {
             backtracking(nodes, 0);
@@ -87,7 +81,6 @@ public class Computer extends Player {
                 // if node doesn't have seed
                 // then take another node
                 if (nodes.get(i).seedIsEmpty()) {
-                    //System.out.println("SKIP " + nodes.get(i));
                     backtracking(nodes, ++i);
                 } else {
                     var deep = 0;
@@ -112,15 +105,12 @@ public class Computer extends Player {
                             seedInHand = nodes.get(start).takeSeed();
                             setHistory(start, seedInHand);
                             next(nodes, start + 1);
-                            //System.out.println("(" + addedPoint + ", " + nodes.get(start).earlySeed() + ") " + nodes.get(start));
-                            //System.out.println("NextNode " + lastNode);
                             seedInHand = 0;
                             addedPoint = 0;
 
                             // if last node is Big Hole
                             // then set into solution
                             if (lastNode.isBigHole()) {
-                                //System.out.println(nodes);
                                 solution.setByBigHole(firstNode);
                             }
                             deep++;
@@ -131,13 +121,6 @@ public class Computer extends Player {
                     if (!solution.hasSolution()) {
                         backtracking(nodes, ++i);
                     }
-
-                    /*
-                    System.out.println();
-                    for (Hole node : nodes) {
-                        System.out.println(node);
-                    }
-                     */
                 }
             }
         }

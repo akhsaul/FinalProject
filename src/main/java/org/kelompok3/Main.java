@@ -67,20 +67,17 @@ public class Main {
         // human player
         var player2 = new Human(2, wholeList2, bigWhole2);
 
-        player1.getSolution(player2.littleHole);
-
-        /*
         List<Hole> nodes = new ArrayList<>();
         // include all littleWhole and bigWhole has by computer player
         nodes.addAll(player1.holeList());
         // exclude bigWhole has by human player
-        nodes.addAll(player2.littleWhole);
+        nodes.addAll(player2.littleHole);
 
         // start backtracking
         Solution computer = player1.getSolution(nodes);
         if(computer.hasSolution()){
             System.out.println("SOLUTION");
             System.out.println(computer.getHole());
-        }*/
+        }
     }
 }

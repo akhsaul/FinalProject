@@ -7,8 +7,8 @@ import org.kelompok3.core.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 /*
  * Created by JFormDesigner on Thu Dec 16 10:54:43 ICT 2021
  */
@@ -18,316 +18,133 @@ import java.util.ArrayList;
  * @author georgeriv
  */
 public class Board extends JFrame {
-    private boolean wait = false;
-    private static int seedInHand = 0;
-    private static Move currentMove = null;
-    private static int X = 0;
-    private static int Y = 0;
-    private static int minX = 0;
-    private static int minY = 0;
-    private static int maxX = 0;
-    private static int maxY = 0;
-    private static int btnIdx = 0;
+    private static Hole firstNode;
+    private static Hole lastNode;
     private static Timer timer = null;
-    private static boolean RUNNING = false;
-    private static java.util.List<LittleHole> computerHoles = null;
-    private static java.util.List<LittleHole> playerHoles = null;
+    private static int seedInHand = 0;
+    List<Hole> nodes = new ArrayList<>();
 
     public Board() {
         initComponents();
         initListener();
         Utils.initAudioPlayer();
-        computerHoles = State.getComputerPlayer().littleHole;
-        playerHoles = State.getHumanPLayer().littleHole;
+        initNodes();
 
+        play();
+    }
+
+    private boolean RUNNING = false;
+
+    private void simulate(Hole hole) {
+        if (!RUNNING) {
+            firstNode = hole;
+            seedInHand = firstNode.takeSeed(true);
+            next(nodes, nodes.indexOf(firstNode) + 1);
+
+            RUNNING = false;
+            if (lastNode.isBigHole()) {
+                play();
+            } else if (lastNode.totalSeed() <= 1) {
+                System.out.println("change turn");
+                changeTurn();
+            } else if (!lastNode.seedIsEmpty()) {
+                simulate(lastNode);
+            }
+        }
+    }
+
+    private void changeTurn() {
         if (State.isComputerTurn()) {
-            var solution = State.getComputerPlayer().getSolution(State.getHumanPLayer().littleHole);
-            var hole = solution.getHole();
-            RUNNING = true;
-            moveDownRight(hole.getX(), hole.getY(), hole.index);
+            State.setCurrentTurn(State.getHumanPLayer().id);
+        } else {
+            State.setCurrentTurn(State.getComputerPlayer().id);
+        }
+        initNodes();
+        play();
+    }
+
+    private void initNodes() {
+        if (State.isComputerTurn()) {
+            nodes.clear();
+            // include all littleWhole and bigWhole has by computer player
+            nodes.addAll(State.getComputerPlayer().holeList());
+            // exclude bigWhole has by human player
+            nodes.addAll(State.getHumanPLayer().littleHole);
+        } else {
+            nodes.clear();
+            // include all littleWhole and bigWhole has by computer player
+            nodes.addAll(State.getHumanPLayer().holeList());
+            // exclude bigWhole has by human player
+            nodes.addAll(State.getComputerPlayer().littleHole);
         }
     }
 
-    public static void main(String[] args) {
-        java.util.List<LittleHole> cHoles = new ArrayList<>();
-        java.util.List<LittleHole> pHoles = new ArrayList<>();
-        var x = 0;
-        for (int i = 7; i >= 1; i--) {
-            cHoles.add(new LittleHole("C-" + i, x));
-            pHoles.add(new LittleHole("P-" + i, x));
-            x++;
-        }
-
-        var cBigHole = new BigHole("C-L");
-        var pBigHole = new BigHole("P-L");
-
-        State.setHumanPLayer(new Human(2, pHoles, pBigHole));
-        State.setComputerPlayer(new Computer(1, cHoles, cBigHole));
-        State.setCurrentTurn(1);
-
-        Utils.initTheme();
-        new Board();
-    }
-
-    private enum Move {
-        KIRI,
-        BAWAH,
-        ATAS,
-        KANAN,
-        KANAN_KIRI,
-        KIRI_KANAN
-    }
-
-    private void moveRightLeft() {
-        X = 598;
-        Y = 100;
-        if (seedInHand > 0) {
-            ActionListener taskPerformer = evt -> {
-                if (X == 598) {
-                    hand.setLocation(X, Y);
-                    hand.setIcon(Utils.getIcon("ClosedHand_kanan.png"));
-                    X++;
-                } else {
-                    Utils.playSfxDown();
-                    hand.setIcon(Utils.getIcon("OpenedHand_kanan.png"));
-                    State.getComputerPlayer().bigHole.addSeed(1, true);
-                    seedInHand--;
-                    timer.stop();
-                    firePropertyChange("move", currentMove, Move.KIRI);
-                }
-            };
-            timer = new Timer(50, taskPerformer);
-            timer.start();
+    private void play() {
+        if (State.isComputerTurn()) {
+            Utils.warnMessage(this, "Sekarang, Kesempatan Komputer");
+            var solution = State.getComputerPlayer().getSolution(nodes);
+            simulate(solution.getHole());
+        } else {
+            Utils.warnMessage(this, "Sekarang, Kesempatan " + State.getPlayerName());
         }
     }
 
-    private void moveLeftRight() {
-        X = 0;
-        Y = 100;
-        if (seedInHand > 0) {
-            ActionListener taskPerformer = evt -> {
-                if (X == 0) {
-                    hand.setLocation(X, Y);
-                    hand.setIcon(Utils.getIcon("ClosedHand_kiri.png"));
-                    X++;
-                } else {
-                    Utils.playSfxDown();
-                    hand.setIcon(Utils.getIcon("OpenedHand_kiri.png"));
-                    State.getHumanPLayer().bigHole.addSeed(1, true);
-                    timer.stop();
-                    firePropertyChange("move", currentMove, Move.KANAN);
-                }
-            };
-            timer = new Timer(50, taskPerformer);
-            timer.start();
+    private void next(@NotNull List<Hole> nodes, int i) {
+        if (i >= nodes.size()) {
+            i = 0;
         }
-    }
+        lastNode = nodes.get(i);
 
-    private void moveDownRight(int x, int y, int buttonIndex) {
-        if (!wait) {
-            X = x;
-            Y = y;
-            maxY = 55;
-            maxX = 490;
-            minX = x;
-            minY = y;
-            currentMove = Move.BAWAH;
-            btnIdx = buttonIndex;
-
-            if (RUNNING) {
-                ActionListener taskPerformer = evt -> {
-                    if (Y == 0) {
-                        hand.setIcon(Utils.getIcon("OpenedHand_atas.png"));
-                    }
-
-                    switch (currentMove) {
-                        case BAWAH -> {
-                            if (Y <= maxY) {
-                                hand.setLocation(X, Y);
-                                Y += 5;
-                            } else {
-                                Utils.playSfxPick();
-                                hand.setIcon(Utils.getIcon("ClosedHand_atas.png"));
-                                if (seedInHand == 0) {
-                                    Utils.playSfxPick();
-                                    seedInHand = State.getComputerPlayer().littleHole.get(btnIdx).takeSeed(true);
-                                } else {
-                                    Utils.playSfxDown();
-                                    State.getComputerPlayer().littleHole.get(btnIdx).addSeed(1, true);
-                                    seedInHand--;
-                                }
-                                currentMove = Move.KANAN;
-                            }
-                        }
-                        case KANAN -> {
-                            if (X <= maxX) {
-                                if (seedInHand > 1) {
-                                    if (X == (minX + 65)) {
-                                        Utils.playSfxDown();
-                                        hand.setIcon(Utils.getIcon("OpenedHand_atas.png"));
-                                        State.getComputerPlayer().littleHole.get(++btnIdx).addSeed(1, true);
-                                        seedInHand--;
-                                        ++X;
-                                        timer.setDelay(1000);
-                                    } else if (X == (minX + 66)) {
-                                        hand.setIcon(Utils.getIcon("ClosedHand_atas.png"));
-                                        minX = (minX + 65);
-                                        --X;
-                                        timer.setDelay(50);
-                                    } else {
-                                        X += 5;
-                                        hand.setLocation(X, Y);
-                                    }
-                                } else {
-                                    currentMove = Move.BAWAH;
-                                    timer.stop();
-                                    timer.restart();
-                                }
-                            } else {
-                                wait = false;
-                                timer.stop();
-                                hand.setIcon(Utils.getIcon("ClosedHand_atas.png"));
-                                firePropertyChange("move", currentMove, Move.KANAN_KIRI);
-                            }
-                        }
-                    }
-                };
-                timer = new Timer(50, taskPerformer);
-                wait = true;
-                timer.start();
+        if (!lastNode.isBigHole() && lastNode.seedIsEmpty() && seedInHand == 1) {
+            var stealSeed = false;
+            if (State.isComputerTurn()) {
+                stealSeed = State.getComputerPlayer().littleHole.contains(lastNode);
+            } else {
+                stealSeed = State.getHumanPLayer().littleHole.contains(lastNode);
             }
-        }
-    }
-
-    private void moveUpLeft(int x, int y, int buttonIndex) {
-        if (!wait) {
-            X = x;
-            Y = y;
-            maxY = y;
-            maxX = x;
-            minX = 100;
-            minY = 150;
-            currentMove = Move.ATAS;
-            btnIdx = buttonIndex;
-            if (RUNNING) {
-                ActionListener taskPerformer = evt -> {
-                    if (Y == 195) {
-                        hand.setIcon(Utils.getIcon("OpenedHand_bawah.png"));
-                    }
-                    switch (currentMove) {
-                        case ATAS -> {
-                            if (Y >= minY) {
-                                hand.setLocation(X, Y);
-                                Y -= 5;
-                            } else {
-                                hand.setIcon(Utils.getIcon("ClosedHand_bawah.png"));
-                                if (seedInHand == 0) {
-                                    Utils.playSfxPick();
-                                    seedInHand = State.getHumanPLayer().littleHole.get(btnIdx).takeSeed(true);
-                                } else {
-                                    Utils.playSfxDown();
-                                    State.getHumanPLayer().littleHole.get(btnIdx).addSeed(1, true);
-                                    seedInHand--;
-                                }
-                                currentMove = Move.KIRI;
-                            }
-                        }
-                        case KIRI -> {
-                            if (X >= minX) {
-                                if (seedInHand > 1) {
-                                    if (X == (maxX - 65)) {
-                                        Utils.playSfxDown();
-                                        hand.setIcon(Utils.getIcon("OpenedHand_bawah.png"));
-                                        State.getHumanPLayer().littleHole.get(++btnIdx).addSeed(1, true);
-                                        seedInHand--;
-                                        --X;
-                                        timer.setDelay(1000);
-                                    } else if (X == (maxX - 66)) {
-                                        hand.setIcon(Utils.getIcon("ClosedHand_bawah.png"));
-                                        maxX = (maxX - 65);
-                                        ++X;
-                                        timer.setDelay(50);
-                                    } else {
-                                        X -= 5;
-                                        hand.setLocation(X, Y);
-                                    }
-                                } else {
-                                    currentMove = Move.ATAS;
-                                    timer.stop();
-                                    timer.restart();
-                                }
-                            } else {
-                                wait = false;
-                                timer.stop();
-                                hand.setIcon(Utils.getIcon("ClosedHand_bawah.png"));
-                                firePropertyChange("move", currentMove, Move.KIRI_KANAN);
-                            }
-                        }
-                    }
-                };
-                timer = new Timer(50, taskPerformer);
-                wait = true;
-                timer.start();
+            if (stealSeed) {
+                //do "Shoot" here
+                var seed = 1 + lastNode.getCrossNode(nodes).takeSeed(true);
+                if (State.isComputerTurn()) {
+                    State.getComputerPlayer().bigHole.addSeed(seed, true);
+                } else {
+                    State.getHumanPLayer().bigHole.addSeed(seed, true);
+                }
+            } else {
+                lastNode.addSeed(1, true);
             }
+        } else {
+            lastNode.addSeed(1, true);
+        }
+        seedInHand--;
+
+        if (seedInHand > 0) {
+            next(nodes, ++i);
         }
     }
 
     private void initListener() {
-        /*
-        cBtn7.addActionListener(e -> {
-            moveDownRight(100, 0, 1);
+        pBtn7.addActionListener(e -> {
+            simulate(nodes.get(0));
         });
-        cBtn6.addActionListener(e -> {
-            moveDownRight(165, 0, 2);
+        pBtn6.addActionListener(e -> {
+            simulate(nodes.get(1));
         });
-        cBtn5.addActionListener(e -> {
-            moveDownRight(230, 0, 3);
+        pBtn5.addActionListener(e -> {
+            simulate(nodes.get(2));
         });
-        cBtn4.addActionListener(e -> {
-            moveDownRight(295, 0, 4);
+        pBtn4.addActionListener(e -> {
+            simulate(nodes.get(3));
         });
-        cBtn3.addActionListener(e -> {
-            moveDownRight(360, 0, 5);
+        pBtn3.addActionListener(e -> {
+            simulate(nodes.get(4));
         });
-        cBtn2.addActionListener(e -> {
-            moveDownRight(425, 0, 6);
+        pBtn2.addActionListener(e -> {
+            simulate(nodes.get(5));
         });
-        cBtn1.addActionListener(e -> {
-            moveDownRight(490, 0, 7);
+        pBtn1.addActionListener(e -> {
+            simulate(nodes.get(6));
         });
-         */
-
-        addPropertyChangeListener("move", e -> {
-            if (e.getNewValue() == Move.KIRI_KANAN) {
-                if (State.isComputerTurn()){
-                    firePropertyChange("move", e.getOldValue(), Move.KANAN);
-                }else {
-                    moveLeftRight();
-                }
-            } else if (e.getNewValue() == Move.KANAN) {
-                moveDownRight(100, 0,6 - btnIdx);
-            } else if (e.getNewValue() == Move.KANAN_KIRI) {
-                moveRightLeft();
-            } else if (e.getNewValue() == Move.KIRI) {
-                if (seedInHand <= 1) {
-                    if (State.isComputerTurn()) {
-                        var solution = State.getComputerPlayer().getSolution(State.getHumanPLayer().littleHole);
-                        var hole = solution.getHole();
-                        moveDownRight(hole.getX(), hole.getY(), hole.index);
-                    }
-                } else {
-                    moveUpLeft(490, 195, 6 - btnIdx);
-                }
-            }
-        });
-
-        pBtn7.addActionListener(e -> moveUpLeft(490, 195, 0));
-        pBtn6.addActionListener(e -> moveUpLeft(425, 195, 1));
-        pBtn5.addActionListener(e -> moveUpLeft(360, 195, 2));
-        pBtn4.addActionListener(e -> moveUpLeft(295, 195, 3));
-        pBtn3.addActionListener(e -> moveUpLeft(230, 195, 4));
-        pBtn2.addActionListener(e -> moveUpLeft(165, 195, 5));
-        pBtn1.addActionListener(e -> moveUpLeft(100, 195, 6));
 
         Player player = State.getComputerPlayer();
         BigHole hole = player.bigHole;
@@ -367,7 +184,6 @@ public class Board extends JFrame {
         label5 = new JLabel();
         label1 = new JLabel();
         layerMid = new JLayeredPane();
-        hand = new JLabel();
         pBig = new JLabel();
         cLabel7 = new JLabel();
         cBtn7 = new JButton();
@@ -442,12 +258,6 @@ public class Board extends JFrame {
         //======== layerMid ========
         {
             layerMid.setDoubleBuffered(true);
-
-            //---- hand ----
-            hand.setHorizontalAlignment(SwingConstants.CENTER);
-            hand.setIcon(Utils.getIcon("hand_null.png"));
-            layerMid.add(hand, JLayeredPane.DEFAULT_LAYER);
-            hand.setBounds(new Rectangle(new Point(100, 155), hand.getPreferredSize()));
 
             //---- pBig ----
             pBig.setHorizontalAlignment(SwingConstants.CENTER);
@@ -713,7 +523,6 @@ public class Board extends JFrame {
     private JLabel label5;
     private JLabel label1;
     private JLayeredPane layerMid;
-    private JLabel hand;
     private JLabel pBig;
     private JLabel cLabel7;
     private JButton cBtn7;

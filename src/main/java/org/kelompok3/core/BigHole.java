@@ -34,6 +34,7 @@ public class BigHole extends Hole {
 
     public void setLabelImg(@NotNull JLabel label){
         labelImg = label;
+        changeImg();
     }
 
     @Override
