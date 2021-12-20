@@ -1,7 +1,6 @@
 package org.kelompok3.ui;
 
 import org.kelompok3.Utils;
-import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import java.awt.*;

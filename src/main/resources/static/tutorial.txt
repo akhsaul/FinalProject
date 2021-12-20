@@ -1,0 +1,13 @@
+dua orang pemain memilih antara baris atas atau bawah yang juga terdapat lubang besar, yang nantinya berisi biji yang menentukan menang atau kalah.
+
+lalu pemain melakukan suit untuk menentukan siapa yang lebih dulu jalan.
+
+pemain 1 menaruh setiap biji yang ada pada genggamannya ke setiap lubang kecil pada baris atas dan bawah, serta lubang besar milik sendiri searah jarum jam.
+
+apabila biji pada genggaman pemain 1 habis di lubang besar daerah sendiri, maka pemain 1 dapat melanjutkan permainannya dengan cara mengambil biji pada lubang yang paling depan daerah sendiri
+
+apabila biji pada genggaman habis di daerah sendiri tepat di depan lubang lawan, maka biji pada lubang tersebut dapat diambil dan ditaruh pada lubang besar milik sendiri. (menembak)
+
+apabila biji pada genggaman habis lubang di daerah lawan, tetapi pada lubang tersebut awalnya kosong, maka pemain 1 tidak dapat melanjutkan permainan, dan biji pada lubang tersebut tidak dapat diambil.
+
+langkah selanjutnya adalah menghitung isi biji pada kedua lubang besar. Jumlah yang biji yang lebih banyak dinyatakn sebegai pemenang.

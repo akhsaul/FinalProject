@@ -21,11 +21,11 @@ public class BigHole extends Hole {
         if (label != null && labelImg != null) {
             var path = "";
             if (seed == 0) {
-                path = "hole_B.png";
+                path = "static/hole_B.png";
             } else if (seed <= 30) {
                 path += "hole_B_" + seed + ".png";
             } else {
-                path = "hole_B_20.png";
+                path = "static/hole_B_20.png";
             }
             label.setText(String.valueOf(seed));
             labelImg.setIcon(Utils.getIcon(path));

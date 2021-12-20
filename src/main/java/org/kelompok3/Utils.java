@@ -18,6 +18,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +35,7 @@ public final class Utils {
     private static AudioPlayerComponent sfxPick = null;
     private static SystemTray systemTray = null;
     private static PopupMenu popupMenu = null;
+    public static String workingDir = System.getProperty("java.io.tmpdir") + "/congklak/";
 
     private Utils() {
     }
@@ -52,8 +56,8 @@ public final class Utils {
     public static @NotNull URL getRes(String path) {
         URL url = null;
         try {
-            url = ResourceUtils.getURL("classpath:"+path);
-        }catch (Exception e){
+            url = ResourceUtils.getURL("classpath:static/" + path);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // throw error if null
@@ -89,63 +93,6 @@ public final class Utils {
         return Objects.requireNonNull(obj);
     }
 
-    /*
-    private static @Nullable Clip initClip(String filename) {
-        try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(new BufferedInputStream(
-                    Utils.getRes(filename).openStream()
-            ));
-            AudioFormat af = stream.getFormat();
-            Clip clip = AudioSystem.getClip();
-            DataLine.Info info = new DataLine.Info(Clip.class, af);
-
-            Line line = AudioSystem.getLine(info);
-
-            if (!line.isOpen()) {
-                clip.open(stream);
-                return clip;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-     */
-
-    /*
-    public static synchronized void playSound() {
-        if (clipMusic == null) {
-            clipMusic = initClip("backsound.wav");
-            assert clipMusic != null;
-            System.out.println(Arrays.toString(clipMusic.getControls()));
-        }
-        assert clipMusic != null;
-        clipMusic.start();
-        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-     */
-
-    /*
-    public static synchronized void stopSound() {
-        assert clipMusic != null;
-        clipMusic.stop();
-    }
-     */
-
-    /*
-    public static synchronized void playSfx() {
-        if (clipSfx == null) {
-            clipSfx = initClip("sfx.wav");
-            assert clipSfx != null;
-            clipSfx.start();
-        } else {
-            clipSfx.loop(1);
-        }
-    }
-     */
-
     private static @NotNull AudioPlayerComponent initAudioPlayer(String filename, boolean repeat) {
         var component = new AudioPlayerComponent();
         component.mediaPlayer().events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
@@ -156,14 +103,30 @@ public final class Utils {
             }
         });
         component.mediaPlayer().audio().setVolume(100);
-        component.mediaPlayer().media().prepare("file://" + getRes(filename).getPath());
-        component.mediaPlayer().controls().setRepeat(repeat);
+        try {
+            var file = new File(workingDir);
+            file.mkdirs();
+
+            var path = workingDir + filename;
+            file = new File(path);
+            if (!file.exists()) {
+                getRes(filename).openStream().transferTo(
+                        new BufferedOutputStream(new FileOutputStream(file))
+                );
+            }
+
+            // vlcj can't read file in jar
+            component.mediaPlayer().media().prepare(path);
+            component.mediaPlayer().controls().setRepeat(repeat);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return component;
     }
 
-    public static void initAudioPlayer(){
+    public static void initAudioPlayer() {
         if (sound == null) {
-            sound = initAudioPlayer("bgm.wav", true);
+            sound = initAudioPlayer("bgm.mp3", true);
         }
         if (sfxDown == null) {
             sfxDown = initAudioPlayer("sfx_down.wav", false);
@@ -252,7 +215,7 @@ public final class Utils {
                 if (systemTray == null) {
                     systemTray = SystemTray.getSystemTray();
                     initPopupMenu();
-                    var trayIcon = new TrayIcon(Utils.getImgRes("icon.png"), "Game Congklak", popupMenu);
+                    var trayIcon = new TrayIcon(Utils.getImgRes("static/icon.png"), "Game Congklak", popupMenu);
                     trayIcon.setImageAutoSize(true);
                     systemTray.add(trayIcon);
                 }
@@ -272,7 +235,7 @@ public final class Utils {
                 null, null, null);
     }
 
-    public static int infoMessage( Component parent, String msg) {
+    public static int infoMessage(Component parent, String msg) {
         return JOptionPane.showOptionDialog(parent, msg, "Info",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, null, null);

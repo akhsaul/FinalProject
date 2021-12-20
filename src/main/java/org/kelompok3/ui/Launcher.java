@@ -1,6 +1,7 @@
 package org.kelompok3.ui;
 
 import org.kelompok3.Utils;
+import org.kelompok3.server.ServerApp;
 import org.springframework.boot.SpringApplication;
 
 import javax.swing.*;

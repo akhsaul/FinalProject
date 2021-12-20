@@ -80,7 +80,6 @@ public class Board extends JFrame {
         var computerSkor = State.getComputerPlayer().bigHole.totalSeed();
         var humanSkor = State.getHumanPLayer().bigHole.totalSeed();
         if ((computerSkor + humanSkor) == 98) {
-            var score = computerSkor;
             var name = "Komputer";
             var status = Status.MENANG;
             if (computerSkor == humanSkor){
@@ -89,7 +88,6 @@ public class Board extends JFrame {
                 status = Status.KALAH;
                 State.setWinner(State.getComputerPlayer());
             } else {
-                score = humanSkor;
                 name = State.getPlayerName();
                 State.setWinner(State.getComputerPlayer());
             }
@@ -100,7 +98,7 @@ public class Board extends JFrame {
                 Utils.infoMessage(this, "Permainan Selesai. Pemenang adalah " + name);
             }
 
-            DBConnector.saveScore(State.getPlayerID(), score, status);
+            DBConnector.saveScore(State.getPlayerID(), humanSkor, status);
             new Score();
             this.dispose();
         }
