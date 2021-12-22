@@ -1,10 +1,8 @@
 package org.kelompok3.server;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kelompok3.core.State;
 import org.kelompok3.database.DBConnector;
 import org.kelompok3.model.ScoreModel;
-import org.kelompok3.ui.Setting;
 import org.kelompok3.ui.Status;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -52,8 +49,8 @@ public class SpringController {
             case "playerName":
                 result = Map.of("playerName", State.getPlayerName());
                 break;
-            case "bgmEnable":
-                result = Map.of("bgmEnable", State.isEnableBgm());
+            case "bgmEnabled":
+                result = Map.of("bgmEnabled", State.isEnableBgm());
                 break;
             case "score":
                 try {

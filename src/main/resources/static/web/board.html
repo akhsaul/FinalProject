@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game Congklak - Board</title>
+    <link rel="icon" href="assets/favicon.png"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+          rel="stylesheet"
+          integrity="sha256-uxjsS9cYFLTjmlr8j5i+DqvOLCBugRzEeWxUMWZeYXQ="
+          crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          crossorigin="anonymous"/>
+    <style>
+        body {
+            background: url("./assets/background_board.png") no-repeat center center fixed;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        #myCanvas {
+            background: url("./assets/congklak_bg.png") no-repeat center center;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+    </style>
+    <!--background: url("./assets/congklak_bg.png") no-repeat center center;-->
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col my-4 mx-auto" style="margin-bottom: 1.6rem !important;">
+            <canvas width="255px" height="73px" id="cvsComputer" class="float-end"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-auto text-center">
+            <canvas id="cvsUp" width="920" height="50"></canvas>
+            <canvas id="myCanvas" width="920" height="220"></canvas>
+            <canvas id="cvsBot" width="920" height="50"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col my-4 mx-auto" style="margin-top: 1.6rem !important;">
+            <canvas width="255px" height="73px" id="cvsPlayer" class="float-start"></canvas>
+        </div>
+    </div>
+</div>
+<button type="button" id="error" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 0; height: 0;"></button>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="errorMsg">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="./js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script>
+    const canvas = document.getElementById("myCanvas");
+    const context = canvas.getContext("2d");
+    const ctxBot = document.getElementById("cvsBot").getContext("2d")
+    const ctxUp = document.getElementById("cvsUp").getContext("2d")
+    const ctxComputer = document.getElementById("cvsComputer").getContext("2d")
+    const ctxPlayer = document.getElementById("cvsPlayer").getContext("2d")
+
+    class Hole {
+        constructor(nameHole, seed, path2D, textCtx, textX, context, dx, dy, size) {
+            this.imgPath = "./assets/"
+            this.name = nameHole
+            this.seed = seed
+            this.dx = dx
+            this.dy = dy
+            this.size = size
+            this.path = path2D
+            this.ctx = context
+            this.img = new Image()
+            this.img.onload = () => {
+                this.drawImageHole()
+            }
+            this.txtCtx = textCtx
+            this.txtX = textX
+            // only init, doesn't doing update()
+            this.initDrawer()
+        }
+
+        addSeed(seed) {
+            this.seed += seed
+            this.update()
+        }
+
+        removeSeed(seed) {
+            if (seed <= this.seed) {
+                this.seed -= seed
+                this.update()
+            }
+        }
+
+        /**
+         * you have to call update()
+         * <br>
+         * after initDrawer()
+         * */
+        initDrawer() {
+        }
+
+        update() {
+        }
+
+        drawImageHole() {
+            this.ctx.save()
+            this.ctx.beginPath()
+            this.ctx.drawImage(this.img, this.dx, this.dy, this.size, this.size);
+            this.ctx.clip(this.path)
+            this.ctx.restore();
+            //this.ctx.stroke(this.path)
+        }
+
+        drawText(x) {
+        }
+
+        isBigHole() {
+        }
+    }
+
+    class LittleHole extends Hole {
+        constructor(nameHole, path2D, textCtx, textX, context, dx, dy) {
+            super(nameHole, 7, path2D, textCtx, textX, context, dx, dy, 80)
+        }
+
+        isBigHole() {
+            return false
+        }
+
+        initDrawer() {
+            this.txtCtx.font = "30px Arial"
+            this.txtCtx.strokeStyle = "white"
+            this.txtCtx.fillStyle = "white"
+            this.update()
+        }
+
+        update() {
+            if (this.seed > 20) {
+                this.img.src = this.imgPath + "hole_L_20.png"
+            } else {
+                this.img.src = this.imgPath + "hole_L_" + this.seed + ".png"
+            }
+            this.drawText(this.txtX)
+        }
+
+
+        drawText(x) {
+            this.txtCtx.clearRect(x, 0, 50, 50)
+            this.txtCtx.rect(x, 0, 50, 50)
+            if (this.seed > 9) {
+                x = x + (40 / 4) - 2
+            } else {
+                x = x + (40 / 2) - 2
+            }
+            this.txtCtx.fillText(this.seed, x, 35)
+            this.txtCtx.stroke()
+        }
+    }
+
+    class BigHole extends Hole {
+        constructor(nameHole, path2D, textCtx, textX, context, dx) {
+            super(nameHole, 0, path2D, textCtx, textX, context, dx, 105 / 2, 115)
+        }
+
+        initDrawer() {
+            this.txtCtx.font = "20px Arial"
+            this.imgScore = new Image()
+            if (this.name === "P-L") {
+                this.imgScorePath = this.imgPath + "player_skor.png"
+                this.imgScoreX = 255 - 67
+            } else {
+                this.imgScorePath = this.imgPath + "computer_skor.png"
+                this.imgScoreX = 0
+            }
+            this.update()
+        }
+
+        update() {
+            if (this.seed > 30) {
+                this.img.src = this.imgPath + "hole_B_30.png"
+            } else {
+                this.img.src = this.imgPath + "hole_B_" + this.seed + ".png"
+            }
+            if (this.txtCtx !== undefined) {
+                this.drawText(this.txtX)
+            }
+        }
+
+        drawText(x) {
+            this.txtCtx.clearRect(this.imgScoreX, 0, 67, 73)
+            if (this.seed <= 9) {
+                x = x + 6.6
+            }
+            this.imgScore.src = this.imgScorePath
+            this.imgScore.onload = () => {
+                this.txtCtx.drawImage(this.imgScore, this.imgScoreX, 0)
+                this.txtCtx.fillText(this.seed, x, 45)
+            }
+        }
+
+        isBigHole() {
+            return true
+        }
+    }
+
+    class Player {
+        constructor(playerName, ctxPlayer, bigHole, littleHole) {
+            this.imgPath = "./assets/"
+            this.imgPlayer = new Image()
+            this.name = playerName
+            this.ctx = ctxPlayer
+            this.bigHole = bigHole
+            this.littleHole = littleHole
+            this.imgPlayerPath = undefined
+            this.imgPlayerX = undefined
+            this.initDrawer()
+        }
+
+        initDrawer() {
+        }
+
+        async drawImage() {
+            this.imgPlayer.src = this.imgPlayerPath
+            const firstLoader = await new Promise(resolve => {
+                this.imgPlayer.onload = () => {
+                    this.ctx.drawImage(this.imgPlayer, this.imgPlayerX, 0)
+                    resolve("done")
+                }
+            })
+            this.bigHole.update()
+            this.ctx.fillText(this.name, 75 + ((9 - this.name.length) * 6.6), 45)
+        }
+
+        holeList() {
+
+        }
+    }
+
+    class Computer extends Player {
+        constructor(ctxPlayer, bigHole, littleHole) {
+            super("Komputer", ctxPlayer, bigHole, littleHole)
+        }
+
+        initDrawer() {
+            this.imgPlayerPath = this.imgPath + "computer.png"
+            this.imgPlayerX = 55
+            this.drawImage()
+        }
+    }
+
+    class Human extends Player {
+        constructor(ctxPlayer, bigHole, littleHole) {
+            super("Pemain", ctxPlayer, bigHole, littleHole)
+        }
+
+        initDrawer() {
+            this.imgPlayerPath = this.imgPath + "player.png"
+            this.imgPlayerX = 0
+            this.drawImage()
+        }
+    }
+
+    // make a path for p-nodes
+    const pBigPath = new Path2D();
+    pBigPath.arc(75, 110, 58, 40, 40 * Math.PI);
+    const p1Path = new Path2D()
+    p1Path.arc(195, 170, 40, 50, 20 * Math.PI);
+    const p2Path = new Path2D()
+    p2Path.arc(283, 170, 40, 50, 20 * Math.PI);
+    const p3Path = new Path2D()
+    p3Path.arc(372, 170, 40, 50, 20 * Math.PI);
+    const p4Path = new Path2D()
+    p4Path.arc(460, 170, 40, 50, 20 * Math.PI);
+    const p5Path = new Path2D()
+    p5Path.arc(550, 170, 40, 50, 20 * Math.PI);
+    const p6Path = new Path2D()
+    p6Path.arc(638, 170, 40, 50, 20 * Math.PI);
+    const p7Path = new Path2D()
+    p7Path.arc(725, 170, 40, 50, 20 * Math.PI);
+
+    // make a hole for human Player
+    const pBig = new BigHole("P-L", pBigPath, ctxPlayer, 208, context, 35 / 2)
+    const p1 = new LittleHole("P-1", p1Path, ctxBot, 170, context, 155, 130)
+    const p2 = new LittleHole("P-2", p2Path, ctxBot, 260, context, 243, 130)
+    const p3 = new LittleHole("P-3", p3Path, ctxBot, 350, context, 332, 130)
+    const p4 = new LittleHole("P-4", p4Path, ctxBot, 440, context, 420, 130)
+    const p5 = new LittleHole("P-5", p5Path, ctxBot, 525, context, 510, 130)
+    const p6 = new LittleHole("P-6", p6Path, ctxBot, 615, context, 598, 130)
+    const p7 = new LittleHole("P-7", p7Path, ctxBot, 700, context, 685, 130)
+
+    // make a path for c-nodes
+    const c7Path = new Path2D()
+    c7Path.arc(195, 55, 40, 50, 20 * Math.PI);
+    const c6Path = new Path2D()
+    c6Path.arc(283, 55, 40, 50, 20 * Math.PI);
+    const c5Path = new Path2D()
+    c5Path.arc(372, 55, 40, 50, 20 * Math.PI);
+    const c4Path = new Path2D()
+    c4Path.arc(460, 55, 40, 50, 20 * Math.PI);
+    const c3Path = new Path2D()
+    c3Path.arc(550, 55, 40, 50, 20 * Math.PI);
+    const c2Path = new Path2D()
+    c2Path.arc(638, 55, 40, 50, 20 * Math.PI);
+    const c1Path = new Path2D()
+    c1Path.arc(725, 55, 40, 50, 20 * Math.PI);
+    const cBigPath = new Path2D();
+    cBigPath.arc(845, 110, 58, 40, 40 * Math.PI);
+
+    // make a hole for computer Player
+    const c7 = new LittleHole("C-7", c7Path, ctxUp, 170, context, 155, 15)
+    const c6 = new LittleHole("C-6", c6Path, ctxUp, 260, context, 243, 15)
+    const c5 = new LittleHole("C-5", c5Path, ctxUp, 350, context, 332, 15)
+    const c4 = new LittleHole("C-4", c4Path, ctxUp, 440, context, 420, 15)
+    const c3 = new LittleHole("C-3", c3Path, ctxUp, 525, context, 510, 15)
+    const c2 = new LittleHole("C-2", c2Path, ctxUp, 615, context, 598, 15)
+    const c1 = new LittleHole("C-1", c1Path, ctxUp, 700, context, 685, 15)
+    const cBig = new BigHole("C-L", cBigPath, ctxComputer, 23.4, context, 788)
+
+    const pemain = new Human(ctxPlayer, pBig, [p7, p6, p5, p4, p3, p2, p1])
+    const komputer = new Computer(ctxComputer, cBig, [c7, c6, c5, c4, c3, c2, c1])
+
+    canvas.addEventListener("click", (e) => {
+        if (context.isPointInPath(p1Path, e.offsetX, e.offsetY)) {
+            console.log("p1")
+            p1.addSeed(1)
+        } else if (context.isPointInPath(p2Path, e.offsetX, e.offsetY)) {
+            console.log("p2")
+            p2.addSeed(1)
+        } else if (context.isPointInPath(p3Path, e.offsetX, e.offsetY)) {
+            console.log("p3")
+            p3.addSeed(1)
+        } else if (context.isPointInPath(p4Path, e.offsetX, e.offsetY)) {
+            console.log("p4")
+            p4.addSeed(1)
+        } else if (context.isPointInPath(p5Path, e.offsetX, e.offsetY)) {
+            console.log("p5")
+            p5.addSeed(1)
+        } else if (context.isPointInPath(p6Path, e.offsetX, e.offsetY)) {
+            console.log("p6")
+            p6.addSeed(1)
+        } else if (context.isPointInPath(p7Path, e.offsetX, e.offsetY)) {
+            console.log("p7")
+            p7.addSeed(1)
+        } else {
+            console.log("unknown")
+        }
+    })
+
+    function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function () {
+            this.sound.play();
+        }
+        this.stop = function () {
+            this.sound.pause();
+        }
+    }
+</script>
+</html>

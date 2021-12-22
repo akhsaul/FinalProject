@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Game Congklak - Skor</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
+    <link rel="icon" href="/assets/favicon.png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
@@ -38,17 +38,7 @@
                                 <th scope="col">Status</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>Pemain</td>
-                                <td>32</td>
-                                <td>Menang</td>
-                            </tr>
-                            <tr>
-                                <td>Pemain</td>
-                                <td>19</td>
-                                <td>Kalah</td>
-                            </tr>
+                            <tbody id="tableBody">
                             </tbody>
                         </table>
                     </div>
@@ -57,5 +47,32 @@
         </div>
     </div>
 </div>
+<button type="button" id="error" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+        style="width: 0; height: 0;"></button>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="errorMsg">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/web/js/scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script>
+    const api = new API()
+    api.getScore(document.getElementById("tableBody"))
+</script>
 </html>
