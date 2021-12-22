@@ -36,20 +36,19 @@ public class DBConnector {
 
                 // make table "setting"
                 sql = "create table if not exists " + dbName + "." + tbSetting +
-                        " (`player_id` int not null auto_increment primary key ," +
+                        "(`player_id` int not null auto_increment primary key," +
                         "`player_name` varchar(9) not null," +
-                        "`bgm_enabled` BOOLEAN not null ," +
+                        "`bgm_enabled` BOOLEAN not null," +
                         "`sfx_enabled` BOOLEAN not null)";
                 statement.execute(sql);
 
                 // make table "score"
-                sql = "create table if not exists congklak.score(\n" +
-                        "    `id_score` int not null auto_increment primary key,\n" +
-                        "    `player_id` int not null,\n" +
-                        "    `score` int not null ,\n" +
-                        "    `status` enum('Menang','Kalah','Seri') not null,\n" +
-                        "    FOREIGN KEY(`player_id`) REFERENCES setting(`player_id`)\n" +
-                        ")";
+                sql = "create table if not exists " + dbName + "." + tbScore +
+                        "(`id_score` int not null auto_increment primary key," +
+                        "`player_id` int not null," +
+                        "`score` int not null," +
+                        "`status` enum('Menang','Kalah','Seri') not null," +
+                        "FOREIGN KEY(`player_id`) REFERENCES setting(`player_id`))";
                 statement.execute(sql);
 
                 // close all
@@ -78,19 +77,31 @@ public class DBConnector {
         }
     }
 
-    public static void initSetting() {
+    public static void prepareAll() {
         connect();
 
         try {
-            var sql = "insert into " + tbSetting + " (`player_name`, `bgm_enabled`, `sfx_enabled`)" +
-                    " values ('" + State.getPlayerName() + "', '" +
-                    toInt(State.isEnableBgm()) + "', '" +
-                    toInt(State.isEnableSfx()) + "')";
-            var statement = connection.createStatement();
-            statement.execute(sql);
-            statement.close();
+            // check if the database has data setting or not
+            var result = getSetting();
+            // will return false if database does not have data setting
+            if (result.next()) {
+                State.setPlayerID(result.getInt("player_id"));
+                State.setPlayerName(result.getString("player_name"));
+                State.setEnableBgm(result.getBoolean("bgm_enabled"));
+                State.setEnableSfx(result.getBoolean("sfx_enabled"));
+            } else {
+                // insert data setting for the first time
+                var sql = "insert into " + tbSetting + " (`player_name`, `bgm_enabled`, `sfx_enabled`)" +
+                        " values ('" + State.getPlayerName() + "', '" +
+                        toInt(State.isEnableBgm()) + "', '" +
+                        toInt(State.isEnableSfx()) + "')";
+                statement = connection.createStatement();
+                statement.execute(sql);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            closeStatement();
         }
     }
 
@@ -113,15 +124,8 @@ public class DBConnector {
     public static void saveScore(int playerID, int score, Status status) {
         connect();
         try {
-            String stats = "";
-            switch (status) {
-                case SERI -> stats = "Seri";
-                case MENANG -> stats = "Menang";
-                case KALAH -> stats = "Kalah";
-            }
-
             var sql = "insert into " + tbScore + " (`id_score`, `player_id`, `score`, `status`)" +
-                    " values (null, '" + playerID + "', '" + score + "', '" + stats + "')";
+                    " values (null, '" + playerID + "', '" + score + "', '" + status + "')";
             var statement = connection.createStatement();
             statement.execute(sql);
             statement.close();
@@ -134,7 +138,7 @@ public class DBConnector {
         connect();
         ResultSet resultSet = null;
         try {
-            var sql ="SELECT `setting`.`player_id`, `setting`.`player_name`, `score`.`score`, `score`.`status` FROM score" +
+            var sql = "SELECT `setting`.`player_name`, `score`.`score`, `score`.`status` FROM score" +
                     " INNER JOIN setting ON score.player_id = setting.player_id;";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);

@@ -86,20 +86,14 @@ public final class State {
 
     public static synchronized void setPlayerName(@NotNull String name){playerName = name;}
 
+    public static void setPlayerID(int id){
+        playerID = id;
+    }
+
     /**
      * only for saving score
      * */
     public static Integer getPlayerID(){
-        if (playerID == null) {
-            var result = DBConnector.getSetting();
-            try {
-                while (result.next()) {
-                    playerID = result.getInt("player_id");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         return Utils.notNull(playerID);
     }
 }

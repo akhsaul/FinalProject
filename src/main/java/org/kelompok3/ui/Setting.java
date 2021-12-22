@@ -21,27 +21,6 @@ public class Setting extends JFrame {
         initListener();
     }
 
-    public static void prepareAll(){
-        try {
-            // check if the database has data setting or not
-            var result = DBConnector.getSetting();
-            // will return false if database does not have data setting
-            if (result.next()) {
-                State.setPlayerName(result.getString("player_name"));
-                State.setEnableBgm(result.getBoolean("bgm_enabled"));
-                State.setEnableSfx(result.getBoolean("sfx_enabled"));
-            } else {
-                // insert data setting for the first time
-                DBConnector.initSetting();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // always close
-            DBConnector.closeStatement();
-        }
-    }
-
     private void initListener() {
         backBtn.addActionListener(e -> {
             if (!State.getPlayerName().equals(name.getText())) {
@@ -82,10 +61,11 @@ public class Setting extends JFrame {
             }
             DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
         });
+        /*
         sfx.addActionListener(e -> {
             State.setEnableSfx(sfx.isSelected());
             DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
-        });
+        });*/
     }
 
     private void initComponents() {
@@ -139,10 +119,12 @@ public class Setting extends JFrame {
         label3.setForeground(Color.white);
 
         //---- label4 ----
+        /*
         label4.setText("Aktifkan Sfx ?");
         label4.setFont(new Font("Comic Sans MS", label4.getFont().getStyle(), 15));
         label4.setHorizontalAlignment(SwingConstants.LEFT);
         label4.setForeground(Color.white);
+        */
 
         //---- backBtn ----
         backBtn.setText("KEMBALI");
@@ -164,7 +146,7 @@ public class Setting extends JFrame {
                                                         .addComponent(label3, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(30, 30, 30)
                                                 .addGroup(contentPaneLayout.createParallelGroup()
-                                                        .addComponent(sfx)
+                                                        //.addComponent(sfx)
                                                         .addComponent(bgm)
                                                         .addComponent(name, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(contentPaneLayout.createSequentialGroup()
@@ -197,7 +179,7 @@ public class Setting extends JFrame {
                                         .addComponent(label3))
                                 .addGap(40, 40, 40)
                                 .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(sfx)
+                                        //.addComponent(sfx)
                                         .addComponent(label4))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                                 .addComponent(save, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)

@@ -1,6 +1,7 @@
 package org.kelompok3.ui;
 
 import org.kelompok3.Utils;
+import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.awt.*;
  */
 public class MainGUI extends JFrame {
     public MainGUI() {
-        Setting.prepareAll();
+        DBConnector.prepareAll();
         Utils.initAudioPlayer();
         Utils.playSound();
         initComponents();

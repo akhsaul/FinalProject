@@ -81,18 +81,18 @@ public class Board extends JFrame {
         var humanSkor = State.getHumanPLayer().bigHole.totalSeed();
         if ((computerSkor + humanSkor) == 98) {
             var name = "Komputer";
-            var status = Status.MENANG;
+            var status = Status.Menang;
             if (computerSkor == humanSkor){
-                status = Status.SERI;
+                status = Status.Seri;
             }else if (computerSkor > humanSkor) {
-                status = Status.KALAH;
+                status = Status.Kalah;
                 State.setWinner(State.getComputerPlayer());
             } else {
                 name = State.getPlayerName();
                 State.setWinner(State.getComputerPlayer());
             }
 
-            if (status == Status.SERI){
+            if (status == Status.Seri){
                 Utils.infoMessage(this, "Permainan Selesai. Hasilnya adalah SERI");
             } else {
                 Utils.infoMessage(this, "Permainan Selesai. Pemenang adalah " + name);
