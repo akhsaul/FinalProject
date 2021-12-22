@@ -4,16 +4,21 @@ import org.kelompok3.core.State;
 import org.kelompok3.database.DBConnector;
 import org.kelompok3.model.ScoreModel;
 import org.kelompok3.ui.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
 public class SpringController {
+    private final Logger LOGGER = LoggerFactory.getLogger(SpringController.class);
+
     @GetMapping("/")
     String index() {
         return "Greetings from Spring Boot!<br>" +
@@ -43,7 +48,9 @@ public class SpringController {
     }
 
     @GetMapping(value = "/api/congklak/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<?> get(@PathVariable String key) {
+    ResponseEntity<?> get(@PathVariable String key, HttpServletRequest request) {
+        LOGGER.info(request.getHeader("Host") + request.getRequestURI());
+
         Object result = null;
         switch (key) {
             case "playerName":
@@ -85,7 +92,9 @@ public class SpringController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<?> post(@PathVariable String key, @RequestBody Object obj){
+    ResponseEntity<?> post(@PathVariable String key, @RequestBody Object obj, HttpServletRequest request){
+        LOGGER.info(request.getHeader("Host") + request.getRequestURI());
+
         Object result = null;
 
         switch (key){
