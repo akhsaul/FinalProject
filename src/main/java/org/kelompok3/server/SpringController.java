@@ -1,8 +1,12 @@
 package org.kelompok3.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kelompok3.core.State;
 import org.kelompok3.database.DBConnector;
+import org.kelompok3.model.NodesModel;
 import org.kelompok3.model.ScoreModel;
+import org.kelompok3.model.SettingModel;
+import org.kelompok3.ui.Setting;
 import org.kelompok3.ui.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +76,7 @@ public class SpringController {
                     }
                     result = array;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.error("Get Request. ", e);
                 } finally {
                     DBConnector.closeStatement();
                 }
@@ -92,21 +96,41 @@ public class SpringController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    ResponseEntity<?> post(@PathVariable String key, @RequestBody Object obj, HttpServletRequest request){
+    ResponseEntity<?> post(@PathVariable String key, @RequestBody String data, HttpServletRequest request) {
         LOGGER.info(request.getHeader("Host") + request.getRequestURI());
+        ObjectMapper mapper = new ObjectMapper();
 
         Object result = null;
 
-        switch (key){
-            case "score":
-                break;
-            case "setting":
-                break;
-            default:
-                break;
+        try {
+            switch (key) {
+                case "combination" ->{
+                    System.out.println(data);
+                    var tes = mapper.readValue(data, NodesModel.class);
+                    System.out.println(tes);
+                    result = "{\"success\": true}";
+                }
+                case "score" -> {
+                    ScoreModel scoreModel = mapper.readValue(data, ScoreModel.class);
+                    if (State.getPlayerName().equals(scoreModel.getPlayerName())) {
+                        DBConnector.saveScore(State.getPlayerID(), scoreModel.getScore(), scoreModel.getStatus());
+                        result = "{\"success\": true}";
+                    }
+                }
+                case "setting" -> {
+                    SettingModel settingModel = mapper.readValue(data, SettingModel.class);
+                    DBConnector.saveSetting(settingModel.getPlayerName(), settingModel.getBgmEnabled());
+                    var resultModel = new SettingModel();
+                    resultModel.setPlayerName(State.getPlayerName());
+                    resultModel.setBgmEnabled(State.isEnableBgm());
+                    result = resultModel;
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Post Request. ", e);
         }
 
-        if (result != null){
+        if (result != null) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.badRequest().build();

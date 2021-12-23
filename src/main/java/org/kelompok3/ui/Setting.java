@@ -25,47 +25,41 @@ public class Setting extends JFrame {
         backBtn.addActionListener(e -> {
             if (!State.getPlayerName().equals(name.getText())) {
                 Utils.warnMessage(this, "Nama pemain mengalami perubahan.\nTekan tombol SIMPAN terlebih dahulu!");
+            } else if (State.isEnableBgm() != bgm.isSelected()) {
+                Utils.warnMessage(this, "Pengaturan Bgm mengalami perubahan.\nTekan tombol SIMPAN terlebih dahulu!");
             } else {
                 new MainGUI();
                 this.dispose();
             }
         });
         save.addActionListener(e -> {
-            final var pattern = Pattern.compile("[^a-zA-Z0-9_]", Pattern.MULTILINE);
-            final var txt = name.getText().trim();
-            final var matcher = pattern.matcher(txt);
-            final var wrongTxt = new StringBuilder();
-            while (matcher.find()) {
-                wrongTxt.append(matcher.group(0));
-            }
+            if (!State.getPlayerName().equals(name.getText()) || State.isEnableBgm() != bgm.isSelected()) {
+                final var pattern = Pattern.compile("[^a-zA-Z0-9_]", Pattern.MULTILINE);
+                final var txt = name.getText().trim();
+                final var matcher = pattern.matcher(txt);
+                final var wrongTxt = new StringBuilder();
+                while (matcher.find()) {
+                    wrongTxt.append(matcher.group(0));
+                }
 
-            // verify before saving
-            if (!wrongTxt.isEmpty()) {
-                Utils.warnMessage(this, "Nama pemain tidak benar !\nNama pemain tidak boleh mengandung '" + wrongTxt + "'");
-            } else {
-                if (!txt.isBlank() && !txt.isEmpty() && (txt.length() < 5 || txt.length() > 9)) {
-                    Utils.warnMessage(this, "Nama pemain minimal 5 karakter dan maksimal 9 karakter");
+                // verify before saving
+                if (!wrongTxt.isEmpty()) {
+                    Utils.warnMessage(this, "Nama pemain tidak benar !\nNama pemain tidak boleh mengandung '" + wrongTxt + "'");
                 } else {
-                    var oldName = State.getPlayerName();
-                    State.setPlayerName(txt);
-                    DBConnector.saveSetting(oldName, State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
+                    if (!txt.isBlank() && !txt.isEmpty() && (txt.length() < 5 || txt.length() > 9)) {
+                        Utils.warnMessage(this, "Nama pemain minimal 5 karakter dan maksimal 9 karakter");
+                    } else {
+                        DBConnector.saveSetting(txt, bgm.isSelected());
+
+                        if (State.isEnableBgm()) {
+                            Utils.playSound();
+                        } else {
+                            Utils.stopSound();
+                        }
+                    }
                 }
             }
         });
-        bgm.addActionListener(e -> {
-            State.setEnableBgm(bgm.isSelected());
-            if (bgm.isSelected()){
-                Utils.playSound();
-            }else {
-                Utils.stopSound();
-            }
-            DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
-        });
-        /*
-        sfx.addActionListener(e -> {
-            State.setEnableSfx(sfx.isSelected());
-            DBConnector.saveSetting(State.getPlayerName(), State.getPlayerName(), State.isEnableBgm(), State.isEnableSfx());
-        });*/
     }
 
     private void initComponents() {

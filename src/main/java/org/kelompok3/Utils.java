@@ -236,7 +236,7 @@ public final class Utils {
     }
 
     public static int infoMessage(Component parent, String msg) {
-        return JOptionPane.showOptionDialog(parent, msg, "Info",
+        return JOptionPane.showOptionDialog(parent, msg, "Informasi",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, null, null);
     }

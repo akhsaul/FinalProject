@@ -38,8 +38,7 @@ public class DBConnector {
                 sql = "create table if not exists " + dbName + "." + tbSetting +
                         "(`player_id` int not null auto_increment primary key," +
                         "`player_name` varchar(9) not null," +
-                        "`bgm_enabled` BOOLEAN not null," +
-                        "`sfx_enabled` BOOLEAN not null)";
+                        "`bgm_enabled` BOOLEAN not null)";
                 statement.execute(sql);
 
                 // make table "score"
@@ -88,13 +87,10 @@ public class DBConnector {
                 State.setPlayerID(result.getInt("player_id"));
                 State.setPlayerName(result.getString("player_name"));
                 State.setEnableBgm(result.getBoolean("bgm_enabled"));
-                State.setEnableSfx(result.getBoolean("sfx_enabled"));
             } else {
                 // insert data setting for the first time
-                var sql = "insert into " + tbSetting + " (`player_name`, `bgm_enabled`, `sfx_enabled`)" +
-                        " values ('" + State.getPlayerName() + "', '" +
-                        toInt(State.isEnableBgm()) + "', '" +
-                        toInt(State.isEnableSfx()) + "')";
+                var sql = "insert into " + tbSetting + " (`player_name`, `bgm_enabled`)" +
+                        " values ('" + State.getPlayerName() + "', '" + toInt(State.isEnableBgm()) + "')";
                 statement = connection.createStatement();
                 statement.execute(sql);
             }
@@ -105,17 +101,19 @@ public class DBConnector {
         }
     }
 
-    public static void saveSetting(String oldPlayerName, String newPlayerName, boolean bgm, boolean sfx) {
+    public static void saveSetting(String newPlayerName, boolean bgm) {
         connect();
 
         try {
-            var sql = "update " + tbSetting + " set `player_name` = '" + newPlayerName + "'," +
-                    "`bgm_enabled` = '" + toInt(bgm) + "'," +
-                    "`sfx_enabled` = '" + toInt(sfx) + "' " +
-                    "WHERE `setting`.`player_name` = '" + oldPlayerName + "'; ";
+            var sql = "UPDATE `setting` SET `player_name` = '" + newPlayerName +
+                    "', `bgm_enabled` = '" + toInt(bgm) +
+                    "' WHERE `setting`.`player_id` = " + State.getPlayerID();
             var statement = connection.createStatement();
             statement.execute(sql);
             statement.close();
+            // insert new value into state
+            State.setPlayerName(newPlayerName);
+            State.setEnableBgm(bgm);
         } catch (Exception e) {
             e.printStackTrace();
         }
