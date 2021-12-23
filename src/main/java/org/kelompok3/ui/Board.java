@@ -76,9 +76,9 @@ public class Board extends JFrame {
         if ((computerSkor + humanSkor) == 98) {
             var name = "Komputer";
             var status = Status.Menang;
-            if (computerSkor == humanSkor){
+            if (computerSkor == humanSkor) {
                 status = Status.Seri;
-            }else if (computerSkor > humanSkor) {
+            } else if (computerSkor > humanSkor) {
                 status = Status.Kalah;
                 State.setWinner(State.getComputerPlayer());
             } else {
@@ -86,7 +86,7 @@ public class Board extends JFrame {
                 State.setWinner(State.getHumanPLayer());
             }
 
-            if (status == Status.Seri){
+            if (status == Status.Seri) {
                 Utils.infoMessage(this, "Permainan Selesai. Hasilnya adalah SERI");
             } else {
                 Utils.infoMessage(this, "Permainan Selesai. Pemenang adalah " + name);
@@ -140,11 +140,16 @@ public class Board extends JFrame {
             }
             if (stealSeed) {
                 //do "Shoot" here
-                var seed = 1 + lastNode.getCrossNode(nodes).takeSeed(true);
-                if (State.isComputerTurn()) {
-                    State.getComputerPlayer().bigHole.addSeed(seed, true);
+                var crossNode = lastNode.getCrossNode(nodes);
+                if (!crossNode.seedIsEmpty()) {
+                    var seed = 1 + crossNode.takeSeed(true);
+                    if (State.isComputerTurn()) {
+                        State.getComputerPlayer().bigHole.addSeed(seed, true);
+                    } else {
+                        State.getHumanPLayer().bigHole.addSeed(seed, true);
+                    }
                 } else {
-                    State.getHumanPLayer().bigHole.addSeed(seed, true);
+                    lastNode.addSeed(1, true);
                 }
             } else {
                 lastNode.addSeed(1, true);
