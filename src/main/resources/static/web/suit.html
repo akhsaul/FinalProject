@@ -72,25 +72,27 @@
         </div>
     </div>
 </div>
-<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-        id="info"></button>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!--dialog Modal-->
+<button type="button" id="dialogBtn" class="btn" data-bs-toggle="modal" data-bs-target="#staticDialog"></button>
+<div class="modal fade" id="staticDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="dialogLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Informasi</h5>
-                <button type="button" class="btn-close infoClose" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="dialogLabel">Error</h5>
+                <button type="button" class="btn-close dialogClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="infoMsg">
+            <div class="modal-body" id="dialogMsg">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary infoClose" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary dialogClose" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/web/js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
@@ -163,11 +165,17 @@
         } else {
             --cHand;
         }
+
         let winner = undefined;
         if (pHand === cHand) {
             // repeat because same hand
-            document.getElementById("infoMsg").innerText = "Tangan anda dan tangan computer sama.<br>Silahkan diulang"
-            document.getElementById("info").click()
+            function repeat() {
+                pHand = Hand.NULL
+                changePlayerHand()
+                changeCHand = setInterval(changeComputerHand, 250)
+            }
+
+            dialogFunc("Informasi", "Tangan anda dan tangan computer sama.<br>Silahkan diulang", repeat)
         } else if (pHand === Hand.KERTAS && cHand === Hand.GUNTING) {
             winner = "computer"
         } else if (pHand === Hand.GUNTING && cHand === Hand.KERTAS) {
@@ -184,18 +192,14 @@
 
         if (winner !== undefined) {
             sessionStorage.setItem("currentTurn", winner)
-            document.location = "./board.html"
-        } else {
-            function repeat() {
-                pHand = Hand.NULL
-                changePlayerHand()
-                changeCHand = setInterval(changeComputerHand, 250)
+            if (winner === "computer"){
+                name = "Komputer"
+            } else {
+                name = sessionStorage.getItem("playerName")
             }
-
-            const closeBtn = document.getElementsByClassName("infoClose")
-            for (let i = 0; i < closeBtn.length; i++) {
-                closeBtn[i].addEventListener("click", repeat)
-            }
+            dialogFunc("Informasi", "Kesempatan Pertama adalah " + name, () => {
+                document.location = "./board.html"
+            })
         }
         console.log("humanHand " + pHand, " computerHand " + cHand)
     }

@@ -17,7 +17,7 @@
 <div class="container">
     <div class="row">
         <div class="col mt-5">
-            <a type="button" class="btn btn-dark btn-lg float-start" href="./">KEMBALI</a>
+            <button type="button" class="btn btn-dark btn-lg float-start" id="backBtn">KEMBALI</button>
         </div>
     </div>
     <div class="row">
@@ -30,7 +30,7 @@
             <p style="margin-bottom: 0; font-size: 18px">Nama Pemain :</p>
         </div>
         <div class="col-2">
-            <input type="text" class="form-control text-center" style="padding: .25rem .5rem;" value="Pemain">
+            <input type="text" id="name" class="form-control text-center" style="padding: .25rem .5rem;" value="">
         </div>
     </div>
     <div class="row justify-content-center text-white mt-5">
@@ -41,19 +41,26 @@
             <input type="checkbox" class="form-check-input mt-0" id="bgm">
         </div>
     </div>
+    <div class="row justify-content-center text-white mt-5">
+        <div class="col-2 my-auto">
+            <button type="submit" class="btn btn-dark" id="save">SIMPAN</button>
+        </div>
+    </div>
 </div>
-<button type="button" id="error" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 0; height: 0;"></button>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!--dialog Modal-->
+<button type="button" id="dialogBtn" class="btn" data-bs-toggle="modal" data-bs-target="#staticDialog"></button>
+<div class="modal fade" id="staticDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="dialogLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="dialogLabel"></h5>
+                <button type="button" class="btn-close dialogClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="errorMsg">
+            <div class="modal-body" id="dialogMsg">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary dialogClose" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
@@ -64,4 +71,86 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<script>
+    const playerName = document.getElementById("name")
+    const bgm = document.getElementById("bgm")
+    const current = {
+        playerName: undefined,
+        bgmEnabled: undefined
+    }
+
+    api.getPlayerName().then(
+        value => {
+            playerName.value = value
+            current.playerName = playerName.value
+        }
+    )
+    api.isBgmEnabled().then(
+        value => {
+            bgm.checked = value
+            current.bgmEnabled = bgm.checked
+        }
+    )
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+        if (playerName.value !== current.playerName) {
+            console.log(playerName.value)
+            console.log(current.playerName)
+            dialogFunc("Peringatan!", "Nama pemain mengalami perubahan.<br>Tekan tombol SIMPAN terlebih dahulu!")
+        } else if (bgm.checked !== current.bgmEnabled) {
+            dialogFunc("Peringatan!", "Pengaturan Bgm mengalami perubahan.<br>Tekan tombol SIMPAN terlebih dahulu!")
+        } else {
+            document.location = "./"
+        }
+    })
+
+    document.getElementById("save").addEventListener("click", () => {
+        // only save when current setting changed
+        if (playerName.value !== current.playerName || bgm.checked !== current.bgmEnabled) {
+            const regex = /[^a-zA-Z0-9_]/gm;
+            const str = playerName.value;
+            let m;
+            let wrongTxt = "";
+            while ((m = regex.exec(str)) !== null) {
+                // This is necessary to avoid infinite loops with zero-width matches
+                if (m.index === regex.lastIndex) {
+                    regex.lastIndex++;
+                }
+
+                // The result can be accessed through the `m`-variable.
+                m.forEach((match) => {
+                    wrongTxt = wrongTxt + match;
+                });
+            }
+
+            if (wrongTxt !== "") {
+                dialogFunc("Peringatan!", "Nama pemain tidak benar !<br>Nama pemain tidak boleh mengandung '" + wrongTxt + "'")
+            } else {
+                if (str !== undefined && str !== null && str !== "" && (str.length < 5 || str.length > 9)) {
+                    dialogFunc("Peringatan!", "Nama pemain minimal 5 karakter dan maksimal 9 karakter")
+                } else {
+                    api.saveSetting(playerName.value, bgm.checked).then(
+                        value => {
+                            // get a new data and set into document
+                            playerName.value = value.playerName
+                            current.playerName = playerName.value
+                            // convert into boolean data type
+                            bgm.checked = (value.bgmEnabled === "true")
+                            current.bgmEnabled = bgm.checked
+
+                            if (bgm.checked){
+                                window.addEventListener("click", playBgmSound)
+                            } else {
+                                stopBgmSound()
+                            }
+                        }
+                    )
+                }
+            }
+        } else {
+            console.log("doesn't change")
+        }
+    })
+
+</script>
 </html>

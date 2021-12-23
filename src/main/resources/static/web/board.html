@@ -31,9 +31,7 @@
             -o-background-size: cover;
             background-size: cover;
         }
-
     </style>
-    <!--background: url("./assets/congklak_bg.png") no-repeat center center;-->
 </head>
 <body>
 <div class="container">
@@ -55,29 +53,33 @@
         </div>
     </div>
 </div>
-<button type="button" id="error" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 0; height: 0;"></button>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<!--dialog Modal-->
+<button type="button" id="dialogBtn" class="btn" data-bs-toggle="modal" data-bs-target="#staticDialog"></button>
+<div class="modal fade" id="staticDialog" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="dialogLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="dialogLabel">Error</h5>
+                <button type="button" class="btn-close dialogClose" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="errorMsg">
+            <div class="modal-body" id="dialogMsg">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-secondary dialogClose" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="./js/scripts.js"></script>
+<script src="/web/js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 <script>
+    //const playerName = "Pemain"
+    const playerName = sessionStorage.getItem("playerName")
     const canvas = document.getElementById("myCanvas");
     const context = canvas.getContext("2d");
     const ctxBot = document.getElementById("cvsBot").getContext("2d")
@@ -88,7 +90,7 @@
     class Hole {
         constructor(nameHole, seed, path2D, textCtx, textX, context, dx, dy, size) {
             this.imgPath = "./assets/"
-            this.name = nameHole
+            this.id = nameHole
             this.seed = seed
             this.dx = dx
             this.dy = dy
@@ -103,6 +105,13 @@
             this.txtX = textX
             // only init, doesn't doing update()
             this.initDrawer()
+            this.toJSON = function () {
+                return {
+                    "id": this.id,
+                    "seed": this.seed,
+                    "isBigHole": this.isBigHole()
+                };
+            };
         }
 
         addSeed(seed) {
@@ -191,7 +200,7 @@
         initDrawer() {
             this.txtCtx.font = "20px Arial"
             this.imgScore = new Image()
-            if (this.name === "P-L") {
+            if (this.id === "P-L") {
                 this.imgScorePath = this.imgPath + "player_skor.png"
                 this.imgScoreX = 255 - 67
             } else {
@@ -258,7 +267,10 @@
         }
 
         holeList() {
-
+            let tmp = []
+            tmp.push(...this.littleHole)
+            tmp.push(this.bigHole)
+            return tmp
         }
     }
 
@@ -276,7 +288,7 @@
 
     class Human extends Player {
         constructor(ctxPlayer, bigHole, littleHole) {
-            super("Pemain", ctxPlayer, bigHole, littleHole)
+            super(playerName, ctxPlayer, bigHole, littleHole)
         }
 
         initDrawer() {
@@ -344,47 +356,237 @@
 
     const pemain = new Human(ctxPlayer, pBig, [p7, p6, p5, p4, p3, p2, p1])
     const komputer = new Computer(ctxComputer, cBig, [c7, c6, c5, c4, c3, c2, c1])
+    let currentTurn = sessionStorage.getItem("currentTurn")
+    //let currentTurn = "computer"
+    let RUNNING = false
+    let nodes = []
+    let seedInHand = 0;
+    let lastNode = undefined
+    let hasWinner = false
+
+    function initNodes() {
+        if (currentTurn === "computer") {
+            nodes = []
+            nodes.push(...komputer.holeList())
+            nodes.push(...pemain.littleHole)
+        } else {
+            nodes = []
+            nodes.push(...pemain.holeList())
+            nodes.push(...komputer.littleHole)
+        }
+    }
+
+    function changeTurn() {
+        if (currentTurn === "computer") {
+            currentTurn = "human"
+        } else {
+            currentTurn = "computer"
+        }
+        initNodes()
+        play()
+    }
+
+    function checkAllHole() {
+        let computerSkor = komputer.bigHole.seed;
+        let humanSkor = pemain.bigHole.seed;
+        if ((computerSkor + humanSkor) === 98) {
+            let name = undefined
+            let status;
+            if (computerSkor === humanSkor) {
+                status = "Seri"
+            } else if (computerSkor > humanSkor) {
+                status = "Kalah"
+                name = "Komputer"
+            } else {
+                status = "Menang"
+                name = sessionStorage.getItem("playerName")
+            }
+
+            function finish() {
+                api.saveScore(sessionStorage.getItem("playerName"), humanSkor, status).then(value => {
+                    console.log(value)
+                    // TODO valid location ?
+                    document.location = "./skor"
+                })
+            }
+
+            if (status === "Seri") {
+                dialogFunc("Informasi", "Permainan Selesai. Hasilnya adalah SERI", finish)
+            } else {
+                dialogFunc("Informasi", "Permainan Selesai. Pemenang adalah " + name, finish)
+            }
+            hasWinner = true
+        }
+    }
+
+    function next(holeNodes, i) {
+        if (i >= holeNodes.length) {
+            i = 0
+        }
+        lastNode = holeNodes[i]
+
+        if (lastNode.isBigHole() !== true && lastNode.seed === 0 && seedInHand === 1) {
+            let stealSeed
+            if (currentTurn === "computer") {
+                stealSeed = komputer.littleHole.includes(lastNode)
+            } else {
+                stealSeed = pemain.littleHole.includes(lastNode)
+            }
+            if (stealSeed) {
+                // doShoot
+                const crossNode = holeNodes[(holeNodes.length - 1) - holeNodes.indexOf(lastNode)]
+                // take all seed
+                const seedStolen = crossNode.seed
+                if (seedStolen !== 0) {
+                    let seed = 1 + seedStolen
+                    // then remove
+                    crossNode.removeSeed(seedStolen)
+
+                    if (currentTurn === "computer") {
+                        komputer.bigHole.addSeed(seed)
+                    } else {
+                        pemain.bigHole.addSeed(seed)
+                    }
+                } else {
+                    lastNode.addSeed(1)
+                }
+            } else {
+                lastNode.addSeed(1)
+            }
+        } else {
+            lastNode.addSeed(1)
+        }
+        --seedInHand
+
+        if (seedInHand > 0) {
+            next(holeNodes, ++i)
+        }
+    }
+
+    function simulate(hole) {
+        if (!RUNNING) {
+            if (hole.seed !== 0) {
+                // take all seed
+                seedInHand = hole.seed
+                // then remove all seed
+                hole.removeSeed(seedInHand)
+                next(nodes, nodes.indexOf(hole) + 1)
+
+                RUNNING = false
+                if (lastNode.isBigHole()) {
+                    play()
+                } else if (lastNode.seed <= 1) {
+                    console.log("Change turn")
+                    changeTurn()
+                } else if (lastNode.seed !== 0) {
+                    simulate(lastNode)
+                }
+            }
+        }
+    }
+
+    //let valueCombination = undefined
+
+    async function play() {
+        checkAllHole()
+        if (!hasWinner) {
+            if (currentTurn === "computer") {
+                /*api.getCombination(pemain, komputer).then(
+                value => {
+                    if (value !== undefined) {
+                        // value is LittleHole
+                        simulate(value)
+                    } else {
+                        changeTurn()
+                    }
+                }
+            )*/
+                const cLittleHole = komputer.littleHole
+                const model = {
+                    "human": {
+                        "littleHole": pemain.littleHole,
+                        "bigHole": pemain.bigHole
+                    },
+                    "computer": {
+                        "littleHole": cLittleHole,
+                        "bigHole": komputer.bigHole
+                    }
+                }
+
+                let data = await api.promised_fetch(api.link + "combination", JSON.stringify(model))
+
+                let result = undefined
+                if (data.hasSolution) {
+                    data = data.result;
+                    let x = cLittleHole.length
+                    for (let i = 0; i < x; i++) {
+                        if (cLittleHole[i].id === data.id) {
+                            result = cLittleHole[i]
+                            break
+                        }
+                    }
+                }
+
+                if (result !== undefined) {
+                    // value is LittleHole
+                    simulate(result)
+                } else {
+                    changeTurn()
+                }
+                /*dialogFunc("Informasi", "Sekarang, Kesempatan Komputer", () => {
+                console.log(valueCombination)
+                if (valueCombination !== undefined) {
+                    // value is LittleHole
+                    simulate(valueCombination)
+                } else {
+                    changeTurn()
+                }
+            })*/
+            } else {
+                // human turn
+                let seedLeft = 0
+                pemain.littleHole.forEach((e) => {
+                    seedLeft = seedLeft + e.seed
+                })
+
+                if (seedLeft !== 0) {
+                    dialogFunc("Informasi", "Sekarang, Kesempatan " + playerName)
+                } else {
+                    changeTurn()
+                }
+                console.log(currentTurn)
+            }
+        }
+    }
 
     canvas.addEventListener("click", (e) => {
-        if (context.isPointInPath(p1Path, e.offsetX, e.offsetY)) {
-            console.log("p1")
-            p1.addSeed(1)
-        } else if (context.isPointInPath(p2Path, e.offsetX, e.offsetY)) {
-            console.log("p2")
-            p2.addSeed(1)
-        } else if (context.isPointInPath(p3Path, e.offsetX, e.offsetY)) {
-            console.log("p3")
-            p3.addSeed(1)
-        } else if (context.isPointInPath(p4Path, e.offsetX, e.offsetY)) {
-            console.log("p4")
-            p4.addSeed(1)
-        } else if (context.isPointInPath(p5Path, e.offsetX, e.offsetY)) {
-            console.log("p5")
-            p5.addSeed(1)
+        if (context.isPointInPath(p7Path, e.offsetX, e.offsetY)) {
+            console.log(p7)
+            simulate(nodes[0])
         } else if (context.isPointInPath(p6Path, e.offsetX, e.offsetY)) {
-            console.log("p6")
-            p6.addSeed(1)
-        } else if (context.isPointInPath(p7Path, e.offsetX, e.offsetY)) {
-            console.log("p7")
-            p7.addSeed(1)
+            console.log(p6)
+            simulate(nodes[1])
+        } else if (context.isPointInPath(p5Path, e.offsetX, e.offsetY)) {
+            console.log(p5)
+            simulate(nodes[2])
+        } else if (context.isPointInPath(p4Path, e.offsetX, e.offsetY)) {
+            console.log(p4)
+            simulate(nodes[3])
+        } else if (context.isPointInPath(p3Path, e.offsetX, e.offsetY)) {
+            console.log(p3)
+            simulate(nodes[4])
+        } else if (context.isPointInPath(p2Path, e.offsetX, e.offsetY)) {
+            console.log(p2)
+            simulate(nodes[5])
+        } else if (context.isPointInPath(p1Path, e.offsetX, e.offsetY)) {
+            console.log(p1)
+            simulate(nodes[6])
         } else {
             console.log("unknown")
         }
     })
 
-    function sound(src) {
-        this.sound = document.createElement("audio");
-        this.sound.src = src;
-        this.sound.setAttribute("preload", "auto");
-        this.sound.setAttribute("controls", "none");
-        this.sound.style.display = "none";
-        document.body.appendChild(this.sound);
-        this.play = function () {
-            this.sound.play();
-        }
-        this.stop = function () {
-            this.sound.pause();
-        }
-    }
+    initNodes()
+    play()
 </script>
 </html>

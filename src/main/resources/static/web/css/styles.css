@@ -42,13 +42,7 @@ ul {
     list-style-type: disc;
 }
 
-#error{
-    margin: 0;
-    padding: 0;
-    width: 0;
-    height: 0;
-}
-#info{
+#dialogBtn{
     margin: 0;
     padding: 0;
     width: 0;
