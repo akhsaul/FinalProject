@@ -89,7 +89,7 @@ public class Board extends JFrame {
                 State.setWinner(State.getComputerPlayer());
             } else {
                 name = State.getPlayerName();
-                State.setWinner(State.getComputerPlayer());
+                State.setWinner(State.getHumanPLayer());
             }
 
             if (status == Status.Seri){
@@ -302,7 +302,7 @@ public class Board extends JFrame {
 
             //---- pBig ----
             pBig.setHorizontalAlignment(SwingConstants.CENTER);
-            pBig.setIcon(Utils.getIcon("hole_B.png"));
+            pBig.setIcon(Utils.getIcon("hole_B_0.png"));
             pBig.setBorder(null);
             layerMid.add(pBig, JLayeredPane.DEFAULT_LAYER);
             pBig.setBounds(new Rectangle(new Point(10, 105), pBig.getPreferredSize()));
@@ -386,7 +386,7 @@ public class Board extends JFrame {
 
             //---- cBig ----
             cBig.setHorizontalAlignment(SwingConstants.CENTER);
-            cBig.setIcon(Utils.getIcon("hole_B.png"));
+            cBig.setIcon(Utils.getIcon("hole_B_0.png"));
             cBig.setBorder(null);
             layerMid.add(cBig, JLayeredPane.DEFAULT_LAYER);
             cBig.setBounds(595, 105, 90, 90);

@@ -47,12 +47,10 @@ public class LittleHole extends Hole {
     protected void changeImg() {
         if (button != null && label != null) {
             var path = "";
-            if (seed == 0) {
-                path = "static/hole_L.png";
-            } else if (seed <= 20) {
+            if (seed <= 20) {
                 path += "hole_L_" + seed + ".png";
             } else {
-                path = "static/hole_L_20.png";
+                path = "hole_L_20.png";
             }
             label.setText(String.valueOf(seed));
             button.setIcon(Utils.getIcon(path));

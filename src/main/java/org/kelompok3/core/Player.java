@@ -30,7 +30,7 @@ public abstract class Player {
 
     public List<Hole> holeList(){
         List<Hole> tmp = new ArrayList<>(this.littleHole);
-        tmp.add(bigHole);
+        tmp.add(this.bigHole);
         return Collections.unmodifiableList(tmp);
     }
 }
