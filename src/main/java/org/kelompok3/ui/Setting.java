@@ -7,14 +7,7 @@ import org.kelompok3.database.DBConnector;
 import javax.swing.*;
 import java.awt.*;
 import java.util.regex.Pattern;
-/*
- * Created by JFormDesigner on Thu Dec 16 14:23:17 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Setting extends JFrame {
     public Setting() {
         initComponents();
@@ -64,8 +57,6 @@ public class Setting extends JFrame {
 
     private void initComponents() {
         setContentPane(Utils.getBackgroundImg("background.png"));
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         label1 = new JLabel();
         bgm = new JCheckBox();
         sfx = new JCheckBox();
@@ -186,11 +177,8 @@ public class Setting extends JFrame {
         setIconImage(Utils.getImgRes("icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLabel label1;
     private JCheckBox bgm;
     private JCheckBox sfx;
@@ -200,5 +188,4 @@ public class Setting extends JFrame {
     private JLabel label4;
     private JButton backBtn;
     private JButton save;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

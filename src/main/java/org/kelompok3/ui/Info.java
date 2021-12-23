@@ -7,14 +7,7 @@ import java.awt.Window;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.border.*;
-/*
- * Created by JFormDesigner on Fri Dec 17 00:58:55 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Info extends JDialog {
     public Info(Window owner) {
         super(owner);
@@ -25,8 +18,6 @@ public class Info extends JDialog {
     }
 
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         dialogPane = new JPanel();
         contentPanel = new JPanel();
         tabbedPane1 = new JTabbedPane();
@@ -195,11 +186,8 @@ public class Info extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JPanel dialogPane;
     private JPanel contentPanel;
     private JTabbedPane tabbedPane1;
@@ -217,5 +205,4 @@ public class Info extends JDialog {
     private JLabel label1;
     private JPanel buttonBar;
     private JButton backBtn;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

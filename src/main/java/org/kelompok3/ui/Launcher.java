@@ -6,14 +6,7 @@ import org.springframework.boot.SpringApplication;
 
 import javax.swing.*;
 import java.awt.*;
-/*
- * Created by JFormDesigner on Fri Dec 17 20:51:32 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Launcher extends JFrame {
     public Launcher() {
         initComponents();
@@ -46,8 +39,6 @@ public class Launcher extends JFrame {
     }
 
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         label1 = new JLabel();
         web = new JButton();
         desktop = new JButton();
@@ -99,13 +90,9 @@ public class Launcher extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLabel label1;
     private JButton web;
     private JButton desktop;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

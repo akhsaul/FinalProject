@@ -5,14 +5,7 @@ import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import java.awt.*;
-/*
- * Created by JFormDesigner on Mon Dec 13 18:02:08 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class MainGUI extends JFrame {
     public MainGUI() {
         DBConnector.prepareAll();
@@ -43,8 +36,6 @@ public class MainGUI extends JFrame {
 
     private void initComponents() {
         setContentPane(Utils.getBackgroundImg("background.png"));
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         label = new JLabel();
         playBtn = new JButton();
         infoBtn = new JButton();
@@ -123,15 +114,11 @@ public class MainGUI extends JFrame {
         setIconImage(Utils.getImgRes("icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLabel label;
     private JButton playBtn;
     private JButton infoBtn;
     private JButton scoreBtn;
     private JButton settingBtn;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

@@ -9,14 +9,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-/*
- * Created by JFormDesigner on Wed Dec 15 23:26:33 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Suit extends JFrame {
     private static Hand computerHand = Hand.INIT;
     private static Hand playerHand = Hand.INIT;
@@ -138,8 +131,6 @@ public class Suit extends JFrame {
 
     private void initComponents() {
         setContentPane(Utils.getBackgroundImg("background.png"));
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         label1 = new JLabel();
         label2 = new JLabel();
         label3 = new JLabel();
@@ -274,11 +265,8 @@ public class Suit extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLabel label1;
     private JLabel label2;
     private JLabel label3;
@@ -290,7 +278,6 @@ public class Suit extends JFrame {
     private JButton gunting;
     private JButton kertas;
 
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
     private static class Worker extends SwingWorker<Integer, Icon> {
         private int x = 1;
         private boolean stop = false;

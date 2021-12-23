@@ -10,14 +10,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-/*
- * Created by JFormDesigner on Thu Dec 16 10:54:43 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Board extends JFrame {
     private static Hole lastNode;
     private boolean RUNNING = false;
@@ -217,8 +210,6 @@ public class Board extends JFrame {
 
     private void initComponents() {
         setContentPane(Utils.getBackgroundImg("background_board.png"));
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         layerBot = new JLayeredPane();
         playerName = new JLabel();
         pSkor = new JLabel();
@@ -544,7 +535,6 @@ public class Board extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     private void initBtn(@NotNull JLabel btn) {
@@ -556,8 +546,6 @@ public class Board extends JFrame {
         layerMid.add(btn, JLayeredPane.DEFAULT_LAYER);
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLayeredPane layerBot;
     private JLabel playerName;
     private JLabel pSkor;
@@ -600,5 +588,4 @@ public class Board extends JFrame {
     private JLabel label4;
     private JLabel computerName;
     private JLabel label2;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

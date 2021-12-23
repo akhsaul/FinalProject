@@ -132,8 +132,11 @@ public class Computer extends Player {
             if (!lastNode.isBigHole() && lastNode.seedIsEmpty() && seedInHand == 1) {
                 cek = true;
                 doShoot = true;
-                //do "Shoot" here
-                firstNode.addPoint(1 + lastNode.getCrossNode(nodes).takeSeed());
+                var crossNode = lastNode.getCrossNode(nodes);
+                if (!crossNode.seedIsEmpty()) {
+                    //do "Shoot" here
+                    firstNode.addPoint(1 + crossNode.takeSeed());
+                }
             } else {
                 if (lastNode.isBigHole()) {
                     firstNode.addPoint(1);

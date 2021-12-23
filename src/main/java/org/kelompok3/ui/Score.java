@@ -7,14 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-/*
- * Created by JFormDesigner on Thu Dec 16 10:41:52 ICT 2021
- */
 
-
-/**
- * @author georgeriv
- */
 public class Score extends JFrame {
     public Score() {
         initComponents();
@@ -51,8 +44,6 @@ public class Score extends JFrame {
 
     private void initComponents() {
         setContentPane(Utils.getBackgroundImg("background.png"));
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        // Generated using JFormDesigner Evaluation license - georgeriv
         label1 = new JLabel();
         scrollPane1 = new JScrollPane();
         table1 = new JTable();
@@ -150,14 +141,10 @@ public class Score extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    // Generated using JFormDesigner Evaluation license - georgeriv
     private JLabel label1;
     private JScrollPane scrollPane1;
     private JTable table1;
     private JButton backBtn;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
