@@ -182,7 +182,7 @@ public class Info extends JDialog {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak - Informasi");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         setVisible(true);

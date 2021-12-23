@@ -137,7 +137,7 @@ public class Score extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak - Score");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);

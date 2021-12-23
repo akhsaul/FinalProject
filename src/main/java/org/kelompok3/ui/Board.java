@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Board extends JFrame {
@@ -102,6 +103,7 @@ public class Board extends JFrame {
         if (!State.hasWinner()) {
             if (State.isComputerTurn()) {
                 Utils.infoMessage(this, "Sekarang, Kesempatan Komputer");
+                //var solution = State.getComputerPlayer().getSolution(List.copyOf(nodes));
                 var solution = State.getComputerPlayer().getSolution(nodes);
                 if (solution.hasSolution()) {
                     simulate(solution.getHole());
@@ -277,12 +279,12 @@ public class Board extends JFrame {
 
             //---- label5 ----
             label5.setHorizontalAlignment(SwingConstants.CENTER);
-            label5.setIcon(Utils.getIcon("player_skor.png"));
+            label5.setIcon(Utils.getIcon("assets/player_skor.png"));
             layerBot.add(label5, JLayeredPane.DEFAULT_LAYER);
             label5.setBounds(new Rectangle(new Point(188, 0), label5.getPreferredSize()));
 
             //---- label1 ----
-            label1.setIcon(Utils.getIcon("player.png"));
+            label1.setIcon(Utils.getIcon("assets/player.png"));
             layerBot.add(label1, JLayeredPane.DEFAULT_LAYER);
             label1.setBounds(new Rectangle(new Point(0, 0), label1.getPreferredSize()));
         }
@@ -293,7 +295,7 @@ public class Board extends JFrame {
 
             //---- pBig ----
             pBig.setHorizontalAlignment(SwingConstants.CENTER);
-            pBig.setIcon(Utils.getIcon("hole_B_0.png"));
+            pBig.setIcon(Utils.getIcon("assets/hole_B_0.png"));
             pBig.setBorder(null);
             layerMid.add(pBig, JLayeredPane.DEFAULT_LAYER);
             pBig.setBounds(new Rectangle(new Point(10, 105), pBig.getPreferredSize()));
@@ -305,7 +307,7 @@ public class Board extends JFrame {
             //---- cBtn7 ----
             cBtn7.setContentAreaFilled(false);
             cBtn7.setBorder(null);
-            cBtn7.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn7.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn7, JLayeredPane.DEFAULT_LAYER);
             cBtn7.setBounds(new Rectangle(new Point(120, 78), cBtn7.getPreferredSize()));
 
@@ -316,7 +318,7 @@ public class Board extends JFrame {
             //---- cBtn6 ----
             cBtn6.setContentAreaFilled(false);
             cBtn6.setBorder(null);
-            cBtn6.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn6.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn6, JLayeredPane.DEFAULT_LAYER);
             cBtn6.setBounds(185, 78, 60, 60);
 
@@ -327,7 +329,7 @@ public class Board extends JFrame {
             //---- cBtn5 ----
             cBtn5.setContentAreaFilled(false);
             cBtn5.setBorder(null);
-            cBtn5.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn5.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn5, JLayeredPane.DEFAULT_LAYER);
             cBtn5.setBounds(253, 78, 60, 60);
 
@@ -338,7 +340,7 @@ public class Board extends JFrame {
             //---- cBtn4 ----
             cBtn4.setContentAreaFilled(false);
             cBtn4.setBorder(null);
-            cBtn4.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn4.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn4, JLayeredPane.DEFAULT_LAYER);
             cBtn4.setBounds(320, 78, 60, 60);
 
@@ -349,7 +351,7 @@ public class Board extends JFrame {
             //---- cBtn3 ----
             cBtn3.setContentAreaFilled(false);
             cBtn3.setBorder(null);
-            cBtn3.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn3.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn3, JLayeredPane.DEFAULT_LAYER);
             cBtn3.setBounds(386, 78, 60, 60);
 
@@ -360,7 +362,7 @@ public class Board extends JFrame {
             //---- cBtn2 ----
             cBtn2.setContentAreaFilled(false);
             cBtn2.setBorder(null);
-            cBtn2.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn2.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn2, JLayeredPane.DEFAULT_LAYER);
             cBtn2.setBounds(455, 78, 60, 60);
 
@@ -371,13 +373,13 @@ public class Board extends JFrame {
             //---- cBtn1 ----
             cBtn1.setContentAreaFilled(false);
             cBtn1.setBorder(null);
-            cBtn1.setIcon(Utils.getIcon("hole_L_7.png"));
+            cBtn1.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(cBtn1, JLayeredPane.DEFAULT_LAYER);
             cBtn1.setBounds(520, 78, 60, 60);
 
             //---- cBig ----
             cBig.setHorizontalAlignment(SwingConstants.CENTER);
-            cBig.setIcon(Utils.getIcon("hole_B_0.png"));
+            cBig.setIcon(Utils.getIcon("assets/hole_B_0.png"));
             cBig.setBorder(null);
             layerMid.add(cBig, JLayeredPane.DEFAULT_LAYER);
             cBig.setBounds(595, 105, 90, 90);
@@ -389,7 +391,7 @@ public class Board extends JFrame {
             //---- pBtn1 ----
             pBtn1.setContentAreaFilled(false);
             pBtn1.setBorder(null);
-            pBtn1.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn1.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn1, JLayeredPane.DEFAULT_LAYER);
             pBtn1.setBounds(120, 166, 60, 60);
 
@@ -400,7 +402,7 @@ public class Board extends JFrame {
             //---- pBtn2 ----
             pBtn2.setContentAreaFilled(false);
             pBtn2.setBorder(null);
-            pBtn2.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn2.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn2, JLayeredPane.DEFAULT_LAYER);
             pBtn2.setBounds(new Rectangle(new Point(185, 166), pBtn2.getPreferredSize()));
 
@@ -411,7 +413,7 @@ public class Board extends JFrame {
             //---- pBtn3 ----
             pBtn3.setContentAreaFilled(false);
             pBtn3.setBorder(null);
-            pBtn3.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn3.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn3, JLayeredPane.DEFAULT_LAYER);
             pBtn3.setBounds(251, 166, 60, 60);
 
@@ -422,7 +424,7 @@ public class Board extends JFrame {
             //---- pBtn4 ----
             pBtn4.setContentAreaFilled(false);
             pBtn4.setBorder(null);
-            pBtn4.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn4.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn4, JLayeredPane.DEFAULT_LAYER);
             pBtn4.setBounds(new Rectangle(new Point(320, 166), pBtn4.getPreferredSize()));
 
@@ -433,7 +435,7 @@ public class Board extends JFrame {
             //---- pBtn5 ----
             pBtn5.setContentAreaFilled(false);
             pBtn5.setBorder(null);
-            pBtn5.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn5.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn5, JLayeredPane.DEFAULT_LAYER);
             pBtn5.setBounds(385, 166, 60, 60);
 
@@ -444,7 +446,7 @@ public class Board extends JFrame {
             //---- pBtn6 ----
             pBtn6.setContentAreaFilled(false);
             pBtn6.setBorder(null);
-            pBtn6.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn6.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn6, JLayeredPane.DEFAULT_LAYER);
             pBtn6.setBounds(455, 166, 60, 60);
 
@@ -455,12 +457,12 @@ public class Board extends JFrame {
             //---- pBtn7 ----
             pBtn7.setContentAreaFilled(false);
             pBtn7.setBorder(null);
-            pBtn7.setIcon(Utils.getIcon("hole_L_7.png"));
+            pBtn7.setIcon(Utils.getIcon("assets/hole_L_7.png"));
             layerMid.add(pBtn7, JLayeredPane.DEFAULT_LAYER);
             pBtn7.setBounds(520, 166, 60, 60);
 
             //---- label3 ----
-            label3.setIcon(Utils.getIcon("congklak_bg.png"));
+            label3.setIcon(Utils.getIcon("assets/congklak_bg.png"));
             label3.setHorizontalAlignment(SwingConstants.CENTER);
             layerMid.add(label3, JLayeredPane.DEFAULT_LAYER);
             label3.setBounds(new Rectangle(new Point(0, 48), label3.getPreferredSize()));
@@ -479,7 +481,7 @@ public class Board extends JFrame {
 
             //---- label4 ----
             label4.setHorizontalAlignment(SwingConstants.CENTER);
-            label4.setIcon(Utils.getIcon("computer_skor.png"));
+            label4.setIcon(Utils.getIcon("assets/computer_skor.png"));
             layerTop.add(label4, JLayeredPane.DEFAULT_LAYER);
             label4.setBounds(new Rectangle(new Point(0, 0), label4.getPreferredSize()));
 
@@ -492,7 +494,7 @@ public class Board extends JFrame {
             computerName.setBounds(70, 25, 115, computerName.getPreferredSize().height);
 
             //---- label2 ----
-            label2.setIcon(Utils.getIcon("computer.png"));
+            label2.setIcon(Utils.getIcon("assets/computer.png"));
             layerTop.add(label2, JLayeredPane.DEFAULT_LAYER);
             label2.setBounds(new Rectangle(new Point(55, 0), label2.getPreferredSize()));
         }
@@ -531,7 +533,7 @@ public class Board extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak - Board");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);

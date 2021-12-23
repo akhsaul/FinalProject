@@ -48,9 +48,9 @@ public class LittleHole extends Hole {
         if (button != null && label != null) {
             var path = "";
             if (seed <= 20) {
-                path += "hole_L_" + seed + ".png";
+                path += "assets/hole_L_" + seed + ".png";
             } else {
-                path = "hole_L_20.png";
+                path = "assets/hole_L_20.png";
             }
             label.setText(String.valueOf(seed));
             button.setIcon(Utils.getIcon(path));

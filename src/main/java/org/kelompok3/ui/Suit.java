@@ -114,17 +114,17 @@ public class Suit extends JFrame {
     private void initListener() {
         kertas.addActionListener(e -> {
             playerHand = Hand.KERTAS;
-            player.setIcon(Utils.getIcon("kertas_kiri.png"));
+            player.setIcon(Utils.getIcon("assets/kertas_kiri.png"));
             checkWinner();
         });
         gunting.addActionListener(e -> {
             playerHand = Hand.GUNTING;
-            player.setIcon(Utils.getIcon("gunting_kiri.png"));
+            player.setIcon(Utils.getIcon("assets/gunting_kiri.png"));
             checkWinner();
         });
         batu.addActionListener(e -> {
             playerHand = Hand.BATU;
-            player.setIcon(Utils.getIcon("batu_kiri.png"));
+            player.setIcon(Utils.getIcon("assets/batu_kiri.png"));
             checkWinner();
         });
     }
@@ -170,7 +170,7 @@ public class Suit extends JFrame {
         label4.setForeground(Color.white);
 
         //---- computer ----
-        computer.setIcon(Utils.getIcon("batu_kanan.png"));
+        computer.setIcon(Utils.getIcon("assets/batu_kanan.png"));
         computer.setBorder(new LineBorder(Color.white, 2, true));
 
         //---- player ----
@@ -183,17 +183,17 @@ public class Suit extends JFrame {
         label5.setForeground(Color.white);
 
         //---- kertas ----
-        kertas.setIcon(Utils.getIcon("kertas.png"));
+        kertas.setIcon(Utils.getIcon("assets/kertas.png"));
         kertas.setContentAreaFilled(false);
         kertas.setBorder(new LineBorder(Color.white, 2, true));
 
         //---- gunting ----
-        gunting.setIcon(Utils.getIcon("gunting.png"));
+        gunting.setIcon(Utils.getIcon("assets/gunting.png"));
         gunting.setContentAreaFilled(false);
         gunting.setBorder(new LineBorder(Color.white, 2, true));
 
         //---- batu ----
-        batu.setIcon(Utils.getIcon("batu.png"));
+        batu.setIcon(Utils.getIcon("assets/batu.png"));
         batu.setContentAreaFilled(false);
         batu.setBorder(new LineBorder(Color.white, 2, true));
 
@@ -261,7 +261,7 @@ public class Suit extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak - Suit");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
@@ -309,17 +309,17 @@ public class Suit extends JFrame {
         public void changeImg() throws InterruptedException {
             switch (x) {
                 case 1 -> {
-                    publish(Utils.getIcon("kertas_kanan.png"));
+                    publish(Utils.getIcon("assets/kertas_kanan.png"));
                     computerHand = Hand.KERTAS;
                     ++x;
                 }
                 case 2 -> {
-                    publish(Utils.getIcon("gunting_kanan.png"));
+                    publish(Utils.getIcon("assets/gunting_kanan.png"));
                     computerHand = Hand.GUNTING;
                     ++x;
                 }
                 default -> {
-                    publish(Utils.getIcon("batu_kanan.png"));
+                    publish(Utils.getIcon("assets/batu_kanan.png"));
                     computerHand = Hand.BATU;
                     x = 1;
                 }

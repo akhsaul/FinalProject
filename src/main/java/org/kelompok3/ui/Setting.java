@@ -174,7 +174,7 @@ public class Setting extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak - Pengaturan");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }

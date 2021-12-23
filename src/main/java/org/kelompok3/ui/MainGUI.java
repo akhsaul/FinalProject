@@ -57,7 +57,7 @@ public class MainGUI extends JFrame {
         playBtn.setText("Mainkan");
 
         //---- infoBtn ----
-        infoBtn.setIcon(Utils.getIcon("info.png"));
+        infoBtn.setIcon(Utils.getIcon("assets/info.png"));
         infoBtn.setBorder(null);
         infoBtn.setBorderPainted(false);
         infoBtn.setContentAreaFilled(false);
@@ -66,7 +66,7 @@ public class MainGUI extends JFrame {
         scoreBtn.setText("Lihat Skor");
 
         //---- settingBtn ----
-        settingBtn.setIcon(Utils.getIcon("setting.png"));
+        settingBtn.setIcon(Utils.getIcon("assets/setting.png"));
         settingBtn.setBorderPainted(false);
         settingBtn.setBorder(null);
         settingBtn.setContentAreaFilled(false);
@@ -111,7 +111,7 @@ public class MainGUI extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak");
-        setIconImage(Utils.getImgRes("icon.png"));
+        setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
