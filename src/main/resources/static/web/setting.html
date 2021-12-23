@@ -135,10 +135,12 @@
                             playerName.value = value.playerName
                             current.playerName = playerName.value
                             // convert into boolean data type
-                            bgm.checked = (value.bgmEnabled === "true")
+                            bgm.checked = value.bgmEnabled
                             current.bgmEnabled = bgm.checked
 
                             if (bgm.checked){
+                                // try to play manual
+                                playBgmSound()
                                 window.addEventListener("click", playBgmSound)
                             } else {
                                 stopBgmSound()

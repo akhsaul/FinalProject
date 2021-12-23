@@ -52,6 +52,11 @@ public class SpringController {
         return new ModelAndView("/score/");
     }
 
+    @GetMapping("/congklak/papan")
+    ModelAndView boardGUI() {
+        return new ModelAndView("/board/");
+    }
+
     @GetMapping(value = "/api/congklak/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> get(@PathVariable String key, HttpServletRequest request) {
         LOGGER.info(request.getHeader("Host") + request.getRequestURI());

@@ -25,5 +25,8 @@ public class ServerConfig implements WebMvcConfigurer {
         registry.addViewController("/score/").setViewName(
                 "forward:/web/score.html"
         );
+        registry.addViewController("/board/").setViewName(
+                "forward:/web/board.html"
+        );
     }
 }
