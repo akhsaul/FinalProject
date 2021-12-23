@@ -1,7 +1,7 @@
 package org.kelompok3.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.kelompok3.core.State;
+import org.kelompok3.core.*;
 import org.kelompok3.database.DBConnector;
 import org.kelompok3.model.NodesModel;
 import org.kelompok3.model.ScoreModel;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -104,11 +105,25 @@ public class SpringController {
 
         try {
             switch (key) {
-                case "combination" ->{
-                    System.out.println(data);
-                    var tes = mapper.readValue(data, NodesModel.class);
-                    System.out.println(tes);
-                    result = "{\"success\": true}";
+                case "combination" -> {
+                    var model = mapper.readValue(data, NodesModel.class);
+                    List<Hole> nodes = new ArrayList<>();
+
+                    model.getComputer().getLittleHole().forEach((e) -> nodes.add(new LittleHole(e.getId(), e.getSeed())));
+
+                    var bigHoleModel = model.getComputer().getBigHole();
+                    nodes.add(new BigHole(bigHoleModel.getId(), bigHoleModel.getSeed()));
+
+                    model.getHuman().getLittleHole().forEach((e) -> nodes.add(new LittleHole(e.getId(), e.getSeed())));
+
+                    var bot = Computer.BOT;
+                    bot.backtracking(nodes);
+                    var solution = bot.solution;
+                    if (solution.hasSolution()) {
+                        result = "{\"hasSolution\": true, \"result\": " + mapper.writeValueAsString(solution.getHole()) + "}";
+                    } else {
+                        result = "{\"hasSolution\": false}";
+                    }
                 }
                 case "score" -> {
                     ScoreModel scoreModel = mapper.readValue(data, ScoreModel.class);

@@ -7,12 +7,13 @@ import org.kelompok3.Utils;
 import javax.swing.*;
 
 public class LittleHole extends Hole {
+    @JsonIgnore
     private int x = -1;
+    @JsonIgnore
     private int y = -1;
     @JsonIgnore
     private JButton button = null;
 
-    @JsonIgnore
     public void setButton(@NotNull JButton holeBtn, int x, int y) {
         button = holeBtn;
         this.x = x;
@@ -27,7 +28,6 @@ public class LittleHole extends Hole {
         return y;
     }
 
-    @JsonIgnore
     public @NotNull JButton getButton() {
         return Utils.notNull(button);
     }
@@ -36,12 +36,12 @@ public class LittleHole extends Hole {
         super();
     }
 
-    public LittleHole(@NotNull String id, int index) {
-        this(id, index, 7);
+    public LittleHole(@NotNull String id) {
+        this(id, 7);
     }
 
-    public LittleHole(String id, int index, int seed) {
-        super(id, index, seed);
+    public LittleHole(String id, int seed) {
+        super(id, seed);
     }
 
     protected void changeImg() {

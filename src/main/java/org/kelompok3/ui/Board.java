@@ -69,9 +69,9 @@ public class Board extends JFrame {
             nodes.addAll(State.getHumanPLayer().littleHole);
         } else {
             nodes.clear();
-            // include all littleWhole and bigWhole has by computer player
+            // include all littleWhole and bigWhole has by human player
             nodes.addAll(State.getHumanPLayer().holeList());
-            // exclude bigWhole has by human player
+            // exclude bigWhole has by computer player
             nodes.addAll(State.getComputerPlayer().littleHole);
         }
     }

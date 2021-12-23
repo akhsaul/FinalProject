@@ -1,6 +1,7 @@
 package org.kelompok3.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
 
@@ -10,24 +11,26 @@ import java.util.List;
 @SuppressWarnings("unused")
 public abstract class Hole {
     private String id;
-    private int point = 0;
+    @JsonIgnore
     protected int seed;
+    @JsonIgnore
+    private int point = 0;
+    @JsonIgnore
     private int earlySeed;
+    @JsonIgnore
     private boolean bigHole;
-    public int index = -1;
     @JsonIgnore
     protected JLabel label = null;
 
     Hole() {
     }
 
-    private Hole(@NotNull String id, int index) {
+    private Hole(@NotNull String id) {
         this.id = id;
-        this.index = index;
     }
 
-    public Hole(String id, int index, int seed) {
-        this(id, index);
+    public Hole(String id, int seed) {
+        this(id);
 
         this.seed = seed;
         this.earlySeed = seed;

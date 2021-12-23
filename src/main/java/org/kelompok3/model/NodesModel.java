@@ -61,17 +61,17 @@ public class NodesModel {
         }
 
         public static class HoleModel {
-            private String name;
+            private String id;
             private Integer seed;
             private Boolean isBigHole;
             public HoleModel(){}
 
-            public String getName() {
-                return name;
+            public String getId() {
+                return id;
             }
 
-            public void setName(String name) {
-                this.name = name;
+            public void setId(String id) {
+                this.id = id;
             }
 
             public Integer getSeed() {
@@ -93,7 +93,7 @@ public class NodesModel {
             @Override
             public String toString() {
                 return "{" +
-                        "name='" + name + '\'' +
+                        "id='" + id + '\'' +
                         ", seed=" + seed +
                         ", isBigHole=" + isBigHole +
                         '}';

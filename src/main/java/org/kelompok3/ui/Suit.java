@@ -48,8 +48,8 @@ public class Suit extends JFrame {
         List<LittleHole> pHole = new ArrayList<>();
         var x = 0;
         for (int i = 7; i >= 1; i--) {
-            cHole.add(new LittleHole("C-" + i, x));
-            pHole.add(new LittleHole("P-" + i, x));
+            cHole.add(new LittleHole("C-" + i));
+            pHole.add(new LittleHole("P-" + i));
             x++;
         }
 

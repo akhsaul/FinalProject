@@ -10,7 +10,7 @@ import java.util.List;
 public class Computer extends Player {
     private boolean hasMove = false;
     private boolean isMyTurn = false;
-    private static final Bot BOT = new Bot();
+    public static final Bot BOT = new Bot();
 
     public Computer(int id, @NotNull List<LittleHole> littleWhole, @NotNull BigHole bigWhole) {
         super(id, littleWhole, bigWhole);
@@ -52,8 +52,8 @@ public class Computer extends Player {
                 '}';
     }
 
-    private static final class Bot {
-        Solution solution = new Solution();
+    public static final class Bot {
+        public final Solution solution = new Solution();
 
         private boolean cek = false;
         private boolean doShoot = false;
@@ -66,7 +66,7 @@ public class Computer extends Player {
         private Hole firstNode = null;
         private Hole lastNode = null;
 
-        private void backtracking(@NotNull List<Hole> nodes) {
+        public void backtracking(@NotNull List<Hole> nodes) {
             backtracking(nodes, 0);
         }
 

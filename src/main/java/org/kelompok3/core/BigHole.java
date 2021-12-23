@@ -12,8 +12,8 @@ public class BigHole extends Hole {
         this(id, 0);
     }
 
-    private BigHole(String id, int seed) {
-        super(id, -1, seed);
+    public BigHole(String id, int seed) {
+        super(id, seed);
     }
 
     @Override
