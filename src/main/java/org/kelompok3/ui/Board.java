@@ -145,7 +145,6 @@ public class Board extends JFrame {
             if (stealSeed) {
                 //do "Shoot" here
                 var crossNode = lastNode.getCrossNode(nodes);
-                System.out.println(crossNode.isBigHole());
                 if (!crossNode.seedIsEmpty()) {
                     var seed = 1 + crossNode.takeSeed(true);
                     if (State.isComputerTurn()) {

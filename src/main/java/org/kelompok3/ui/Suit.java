@@ -23,12 +23,6 @@ public class Suit extends JFrame {
         task.doJob(1, false);
     }
 
-    public static void main(String[] args) {
-        Utils.initTheme();
-        DBConnector.prepareAll();
-        new Suit();
-    }
-
     private void initWorker(){
         task = new Worker();
         task.addPropertyChangeListener(e -> {
