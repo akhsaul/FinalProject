@@ -121,7 +121,7 @@ public class SpringController {
 
                     model.getHuman().getLittleHole().forEach((e) -> nodes.add(new LittleHole(e.getId(), e.getSeed())));
 
-                    var bot = Computer.BOT;
+                    var bot = new Bot();
                     bot.backtracking(nodes);
                     var solution = bot.solution;
                     if (solution.hasSolution()) {

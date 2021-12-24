@@ -3,6 +3,7 @@ package org.kelompok3.ui;
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
 import org.kelompok3.core.*;
+import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -20,6 +21,12 @@ public class Suit extends JFrame {
         initListener();
         initWorker();
         task.doJob(1, false);
+    }
+
+    public static void main(String[] args) {
+        Utils.initTheme();
+        DBConnector.prepareAll();
+        new Suit();
     }
 
     private void initWorker(){
