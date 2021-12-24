@@ -110,7 +110,8 @@ public class Computer extends Player {
                             // if last node is Big Hole
                             // then set into solution
                             if (lastNode.isBigHole()) {
-                                solution.setByBigHole(firstNode);
+                                solution.setByBigHole(firstNode, nodes);
+                                break;
                             }
                             deep++;
                         }

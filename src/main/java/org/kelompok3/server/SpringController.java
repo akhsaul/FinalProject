@@ -125,7 +125,7 @@ public class SpringController {
                     bot.backtracking(nodes);
                     var solution = bot.solution;
                     if (solution.hasSolution()) {
-                        result = "{\"hasSolution\": true, \"result\": " + mapper.writeValueAsString(solution.getHole()) + "}";
+                        result = "{\"hasSolution\": true, \"result\": " + mapper.writeValueAsString(nodes.get(solution.getIndexHole())) + "}";
                     } else {
                         result = "{\"hasSolution\": false}";
                     }

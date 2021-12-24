@@ -39,4 +39,9 @@ public class BigHole extends Hole {
     public boolean isBigHole() {
         return true;
     }
+
+    @Override
+    public Hole clone() {
+        return new BigHole(this.getId(), this.seed);
+    }
 }

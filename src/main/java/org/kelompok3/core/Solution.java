@@ -7,7 +7,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class Solution {
     private boolean solution = false;
-    private LittleHole hole = null;
+    private Integer indexHole = null;
 
     public boolean hasSolution() {
         return solution;
@@ -16,43 +16,43 @@ public class Solution {
     /**
      * Only set solution when the "firstNode" direct to "BigWhole" (LastNode)
      */
-    public void setByBigHole(@NotNull Hole firstNode) {
+    public void setByBigHole(@NotNull Hole firstNode, List<Hole> nodes) {
         if (!firstNode.isBigHole()) {
-            firstNode.clearPoint();
+            indexHole = nodes.indexOf(firstNode);
             solution = true;
-            hole = (LittleHole) firstNode;
         }
     }
 
     public void setByMaxPoint(@NotNull List<Hole> nodes) {
         if(!solution) {
             var maxPoint = 0;
-            for (Hole node : nodes) {
-                if (!node.isBigHole() && node.hasPoint()) {
-                    if (node.getPoint() > maxPoint) {
+            var length = nodes.size();
+            for (int i = 0; i < length; i++) {
+                var node = nodes.get(i);
+                if (!node.isBigHole() && node.hasPoint()){
+                    if (node.getPoint() > maxPoint){
                         maxPoint = node.getPoint();
-                        hole = (LittleHole) node;
+                        indexHole = i;
                         solution = true;
                     }
-                    node.clearPoint();
                 }
             }
         }
     }
 
-    public LittleHole getHole() {
-        if (hole == null) {
+    public Integer getIndexHole() {
+        if (indexHole == null) {
             throw new IllegalStateException("Does not have a solution");
         }
         solution = false;
-        return hole;
+        return indexHole;
     }
 
     @Override
     public String toString() {
         return "Solution{" +
                 "solution=" + solution +
-                ", hole=" + hole +
+                ", indexHole=" + indexHole +
                 '}';
     }
 }

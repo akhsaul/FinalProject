@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Board extends JFrame {
@@ -70,6 +69,12 @@ public class Board extends JFrame {
         }
     }
 
+    private ArrayList<Hole> copyNodes(){
+        ArrayList<Hole> tmp = new ArrayList<>();
+        nodes.forEach((e)-> tmp.add(e.clone()));
+        return tmp;
+    }
+
     private void checkAllHole() {
         var computerSkor = State.getComputerPlayer().bigHole.totalSeed();
         var humanSkor = State.getHumanPLayer().bigHole.totalSeed();
@@ -103,10 +108,9 @@ public class Board extends JFrame {
         if (!State.hasWinner()) {
             if (State.isComputerTurn()) {
                 Utils.infoMessage(this, "Sekarang, Kesempatan Komputer");
-                //var solution = State.getComputerPlayer().getSolution(List.copyOf(nodes));
-                var solution = State.getComputerPlayer().getSolution(nodes);
+                var solution = State.getComputerPlayer().getSolution(copyNodes());
                 if (solution.hasSolution()) {
-                    simulate(solution.getHole());
+                    simulate(nodes.get(solution.getIndexHole()));
                 } else {
                     changeTurn();
                 }

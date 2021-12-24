@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public abstract class Hole {
+public abstract class Hole implements Cloneable{
     private String id;
     @JsonIgnore
     protected int seed;
@@ -141,4 +141,6 @@ public abstract class Hole {
                 ", earlySeed=" + earlySeed +
                 '}';
     }
+    // clone
+    public abstract Hole clone();
 }

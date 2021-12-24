@@ -30,8 +30,6 @@ application {
 dependencies {
     // for desktop
     implementation 'com.formdev:flatlaf:1.6.5'
-    implementation 'com.formdev:flatlaf-extras:1.6.5'
-    implementation 'com.formdev:flatlaf-swingx:1.6.5'
     implementation 'com.formdev:flatlaf-intellij-themes:1.6.5'
     implementation fileTree(include: ['*.jar'], dir: 'lib')
     implementation 'uk.co.caprica:vlcj:4.7.1'
@@ -39,9 +37,7 @@ dependencies {
     // for web
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    implementation 'org.springframework.session:spring-session-core'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -49,8 +45,6 @@ dependencies {
     // general
     implementation 'org.jetbrains:annotations:22.0.0'
     runtimeOnly 'mysql:mysql-connector-java'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
