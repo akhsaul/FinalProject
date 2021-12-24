@@ -77,10 +77,9 @@ public class Computer extends Player {
             } else {
                 addHistory(i);
                 firstNode = nodes.get(i);
-                lastNode = nodes.get(i);
                 // if node doesn't have seed
                 // then take another node
-                if (nodes.get(i).seedIsEmpty()) {
+                if (firstNode.seedIsEmpty()) {
                     backtracking(nodes, ++i);
                 } else {
                     var deep = 0;
@@ -98,7 +97,6 @@ public class Computer extends Player {
                             // after moving backwards
                             // stop if history only contain index of first node
                             if (history.size() == 1) {
-                                cek = false;
                                 break;
                             }
                         } else {
