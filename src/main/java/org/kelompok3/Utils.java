@@ -29,8 +29,6 @@ import java.util.Objects;
 public final class Utils {
     private static LookAndFeel theme = null;
     private static AudioPlayerComponent sound = null;
-    private static AudioPlayerComponent sfxDown = null;
-    private static AudioPlayerComponent sfxPick = null;
     private static SystemTray systemTray = null;
     private static PopupMenu popupMenu = null;
     public static String workingDir = System.getProperty("java.io.tmpdir") + "/congklak/";
@@ -126,12 +124,6 @@ public final class Utils {
         if (sound == null) {
             sound = initAudioPlayer("bgm.mp3", true);
         }
-        if (sfxDown == null) {
-            sfxDown = initAudioPlayer("sfx_down.wav", false);
-        }
-        if (sfxPick == null) {
-            sfxPick = initAudioPlayer("sfx_pick.wav", false);
-        }
     }
 
     public static @NotNull String readFile(@NotNull String path) {
@@ -152,18 +144,6 @@ public final class Utils {
     public static synchronized void playSound() {
         if (State.isEnableBgm()) {
             sound.mediaPlayer().controls().play();
-        }
-    }
-
-    public static synchronized void playSfxDown() {
-        if (State.isEnableSfx()) {
-            sfxDown.mediaPlayer().controls().play();
-        }
-    }
-
-    public static synchronized void playSfxPick() {
-        if (State.isEnableSfx()) {
-            sfxPick.mediaPlayer().controls().play();
         }
     }
 

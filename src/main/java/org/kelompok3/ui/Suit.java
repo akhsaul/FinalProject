@@ -3,7 +3,6 @@ package org.kelompok3.ui;
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
 import org.kelompok3.core.*;
-import org.kelompok3.database.DBConnector;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

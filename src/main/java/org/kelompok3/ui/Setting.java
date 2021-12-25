@@ -59,11 +59,9 @@ public class Setting extends JFrame {
         setContentPane(Utils.getBackgroundImg("background.png"));
         label1 = new JLabel();
         bgm = new JCheckBox();
-        sfx = new JCheckBox();
         name = new JTextField();
         label2 = new JLabel();
         label3 = new JLabel();
-        label4 = new JLabel();
         backBtn = new JButton();
         save = new JButton();
 
@@ -82,10 +80,6 @@ public class Setting extends JFrame {
         bgm.setFont(new Font("Comic Sans MS", bgm.getFont().getStyle(), 15));
         bgm.setSelected(State.isEnableBgm());
 
-        //---- sfx ----
-        sfx.setFont(new Font("Comic Sans MS", sfx.getFont().getStyle(), 15));
-        sfx.setSelected(State.isEnableSfx());
-
         //---- name ----
         name.setText(State.getPlayerName());
         name.setHorizontalAlignment(SwingConstants.CENTER);
@@ -103,14 +97,6 @@ public class Setting extends JFrame {
         label3.setHorizontalAlignment(SwingConstants.LEFT);
         label3.setForeground(Color.white);
 
-        //---- label4 ----
-        /*
-        label4.setText("Aktifkan Sfx ?");
-        label4.setFont(new Font("Comic Sans MS", label4.getFont().getStyle(), 15));
-        label4.setHorizontalAlignment(SwingConstants.LEFT);
-        label4.setForeground(Color.white);
-        */
-
         //---- backBtn ----
         backBtn.setText("KEMBALI");
 
@@ -127,7 +113,6 @@ public class Setting extends JFrame {
                                                 .addGap(265, 265, 265)
                                                 .addGroup(contentPaneLayout.createParallelGroup()
                                                         .addComponent(label2, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(label4, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(label3, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(30, 30, 30)
                                                 .addGroup(contentPaneLayout.createParallelGroup()
@@ -163,9 +148,7 @@ public class Setting extends JFrame {
                                         .addComponent(bgm)
                                         .addComponent(label3))
                                 .addGap(40, 40, 40)
-                                .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        //.addComponent(sfx)
-                                        .addComponent(label4))
+                                .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                                 .addComponent(save, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                                 .addGap(46, 46, 46))
@@ -181,11 +164,9 @@ public class Setting extends JFrame {
 
     private JLabel label1;
     private JCheckBox bgm;
-    private JCheckBox sfx;
     private JTextField name;
     private JLabel label2;
     private JLabel label3;
-    private JLabel label4;
     private JButton backBtn;
     private JButton save;
 }

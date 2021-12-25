@@ -20,14 +20,6 @@ public abstract class Player {
     @Override
     public abstract String toString();
 
-    public abstract void setMyTurn(boolean enable);
-
-    public abstract boolean isComputer();
-
-    public abstract boolean isMyTurn();
-
-    public abstract boolean hasMove();
-
     public List<Hole> holeList(){
         List<Hole> tmp = new ArrayList<>(this.littleHole);
         tmp.add(this.bigHole);

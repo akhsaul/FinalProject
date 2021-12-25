@@ -14,20 +14,18 @@ public class MainGUI extends JFrame {
         initComponents();
         initListener();
     }
-    
-    private void initListener(){
-        infoBtn.addActionListener(e -> {
-            new Info(this);
-        });
+
+    private void initListener() {
+        infoBtn.addActionListener(e -> new Info(this));
         settingBtn.addActionListener(e -> {
             new Setting();
             this.dispose();
         });
-        playBtn.addActionListener(e->{
+        playBtn.addActionListener(e -> {
             new Suit();
             this.dispose();
         });
-        scoreBtn.addActionListener(e->{
+        scoreBtn.addActionListener(e -> {
             new Score();
             this.dispose();
         });
