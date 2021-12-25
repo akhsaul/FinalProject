@@ -27,8 +27,6 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 public final class Utils {
-    public static int WIDTH = 816;
-    public static int HEIGHT = 639;
     private static LookAndFeel theme = null;
     private static AudioPlayerComponent sound = null;
     private static AudioPlayerComponent sfxDown = null;

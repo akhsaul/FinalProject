@@ -169,34 +169,19 @@ public class Board extends JFrame {
     }
 
     private void initListener() {
-        pBtn7.addActionListener(e -> {
-            simulate(nodes.get(0));
-        });
-        pBtn6.addActionListener(e -> {
-            simulate(nodes.get(1));
-        });
-        pBtn5.addActionListener(e -> {
-            simulate(nodes.get(2));
-        });
-        pBtn4.addActionListener(e -> {
-            simulate(nodes.get(3));
-        });
-        pBtn3.addActionListener(e -> {
-            simulate(nodes.get(4));
-        });
-        pBtn2.addActionListener(e -> {
-            simulate(nodes.get(5));
-        });
-        pBtn1.addActionListener(e -> {
-            simulate(nodes.get(6));
-        });
+        pBtn7.addActionListener(e -> simulate(nodes.get(0)));
+        pBtn6.addActionListener(e -> simulate(nodes.get(1)));
+        pBtn5.addActionListener(e -> simulate(nodes.get(2)));
+        pBtn4.addActionListener(e -> simulate(nodes.get(3)));
+        pBtn3.addActionListener(e -> simulate(nodes.get(4)));
+        pBtn2.addActionListener(e -> simulate(nodes.get(5)));
+        pBtn1.addActionListener(e -> simulate(nodes.get(6)));
 
         Player player = State.getComputerPlayer();
         BigHole hole = player.bigHole;
         addBtn(player.littleHole,
                 new JLabel[]{cLabel7, cLabel6, cLabel5, cLabel4, cLabel3, cLabel2, cLabel1},
-                new JButton[]{cBtn7, cBtn6, cBtn5, cBtn4, cBtn3, cBtn2, cBtn1},
-                new int[]{100, 165, 230, 295, 360, 425, 490}, 0);
+                new JButton[]{cBtn7, cBtn6, cBtn5, cBtn4, cBtn3, cBtn2, cBtn1});
         hole.setLabel(cSkor);
         hole.setLabelImg(cBig);
 
@@ -204,17 +189,16 @@ public class Board extends JFrame {
         hole = player.bigHole;
         addBtn(player.littleHole,
                 new JLabel[]{pLabel7, pLabel6, pLabel5, pLabel4, pLabel3, pLabel2, pLabel1},
-                new JButton[]{pBtn7, pBtn6, pBtn5, pBtn4, pBtn3, pBtn2, pBtn1},
-                new int[]{490, 425, 360, 295, 230, 165, 100}, 195);
+                new JButton[]{pBtn7, pBtn6, pBtn5, pBtn4, pBtn3, pBtn2, pBtn1});
         hole.setLabel(pSkor);
         hole.setLabelImg(pBig);
     }
 
     private void addBtn(java.util.List<LittleHole> list,
-                        JLabel[] labels, JButton[] buttons, int[] x, int y) {
+                        JLabel[] labels, JButton[] buttons) {
         for (int i = 0; i < buttons.length; i++) {
             var hole = list.get(i);
-            hole.setButton(buttons[i], x[i], y);
+            hole.setButton(buttons[i]);
             hole.setLabel(labels[i]);
         }
     }

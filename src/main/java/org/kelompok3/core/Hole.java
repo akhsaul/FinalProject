@@ -1,7 +1,6 @@
 package org.kelompok3.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 import org.kelompok3.Utils;
 
@@ -12,13 +11,11 @@ import java.util.List;
 public abstract class Hole implements Cloneable{
     private String id;
     @JsonIgnore
-    protected int seed;
+    private int seed;
     @JsonIgnore
     private int point = 0;
     @JsonIgnore
     private int earlySeed;
-    @JsonIgnore
-    private boolean bigHole;
     @JsonIgnore
     protected JLabel label = null;
 

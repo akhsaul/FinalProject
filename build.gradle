@@ -31,11 +31,11 @@ dependencies {
     // for desktop
     implementation 'com.formdev:flatlaf:1.6.5'
     implementation 'com.formdev:flatlaf-intellij-themes:1.6.5'
-    implementation fileTree(include: ['*.jar'], dir: 'lib')
+    //implementation fileTree(include: ['*.jar'], dir: 'lib')
     implementation 'uk.co.caprica:vlcj:4.7.1'
 
     // for web
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

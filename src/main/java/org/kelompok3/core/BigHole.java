@@ -20,6 +20,7 @@ public class BigHole extends Hole {
     protected void changeImg() {
         if (label != null && labelImg != null) {
             var path = "";
+            var seed = this.totalSeed();
             if (seed <= 30) {
                 path += "assets/hole_B_" + seed + ".png";
             } else {
@@ -42,6 +43,6 @@ public class BigHole extends Hole {
 
     @Override
     public Hole clone() {
-        return new BigHole(this.getId(), this.seed);
+        return new BigHole(this.getId(), this.totalSeed());
     }
 }

@@ -8,32 +8,11 @@ import javax.swing.*;
 
 public class LittleHole extends Hole {
     @JsonIgnore
-    private int x = -1;
-    @JsonIgnore
-    private int y = -1;
-    @JsonIgnore
     private JButton button = null;
 
-    public void setButton(@NotNull JButton holeBtn, int x, int y) {
+    public void setButton(@NotNull JButton holeBtn) {
         button = holeBtn;
-        this.x = x;
-        this.y = y;
         changeImg();
-    }
-
-    public int getX(){
-        return x;
-    }
-    public int getY(){
-        return y;
-    }
-
-    public @NotNull JButton getButton() {
-        return Utils.notNull(button);
-    }
-
-    private LittleHole() {
-        super();
     }
 
     public LittleHole(@NotNull String id) {
@@ -47,6 +26,7 @@ public class LittleHole extends Hole {
     protected void changeImg() {
         if (button != null && label != null) {
             var path = "";
+            var seed = this.totalSeed();
             if (seed <= 20) {
                 path += "assets/hole_L_" + seed + ".png";
             } else {
@@ -64,6 +44,6 @@ public class LittleHole extends Hole {
 
     @Override
     public Hole clone() {
-        return new LittleHole(this.getId(), this.seed);
+        return new LittleHole(this.getId(), this.totalSeed());
     }
 }

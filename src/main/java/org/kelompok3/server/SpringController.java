@@ -1,12 +1,12 @@
 package org.kelompok3.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.NotNull;
 import org.kelompok3.core.*;
 import org.kelompok3.database.DBConnector;
 import org.kelompok3.model.NodesModel;
 import org.kelompok3.model.ScoreModel;
 import org.kelompok3.model.SettingModel;
-import org.kelompok3.ui.Setting;
 import org.kelompok3.ui.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,13 +63,9 @@ public class SpringController {
 
         Object result = null;
         switch (key) {
-            case "playerName":
-                result = Map.of("playerName", State.getPlayerName());
-                break;
-            case "bgmEnabled":
-                result = Map.of("bgmEnabled", State.isEnableBgm());
-                break;
-            case "score":
+            case "playerName" -> result = Map.of("playerName", State.getPlayerName());
+            case "bgmEnabled" -> result = Map.of("bgmEnabled", State.isEnableBgm());
+            case "score" -> {
                 try {
                     var resultSet = DBConnector.getScore();
                     ArrayList<ScoreModel> array = new ArrayList<>();
@@ -86,9 +82,7 @@ public class SpringController {
                 } finally {
                     DBConnector.closeStatement();
                 }
-                break;
-            default:
-                break;
+            }
         }
 
         if (result != null) {
@@ -111,21 +105,14 @@ public class SpringController {
         try {
             switch (key) {
                 case "combination" -> {
-                    var model = mapper.readValue(data, NodesModel.class);
-                    List<Hole> nodes = new ArrayList<>();
-
-                    model.getComputer().getLittleHole().forEach((e) -> nodes.add(new LittleHole(e.getId(), e.getSeed())));
-
-                    var bigHoleModel = model.getComputer().getBigHole();
-                    nodes.add(new BigHole(bigHoleModel.getId(), bigHoleModel.getSeed()));
-
-                    model.getHuman().getLittleHole().forEach((e) -> nodes.add(new LittleHole(e.getId(), e.getSeed())));
+                    var nodes = prepareNodes(mapper.readValue(data, NodesModel.class));
 
                     var bot = new Bot();
                     bot.backtracking(nodes);
                     var solution = bot.solution;
                     if (solution.hasSolution()) {
-                        result = "{\"hasSolution\": true, \"result\": " + mapper.writeValueAsString(nodes.get(solution.getIndexHole())) + "}";
+                        result = "{\"hasSolution\": true, \"result\": " +
+                                mapper.writeValueAsString(nodes.get(solution.getIndexHole())) + "}";
                     } else {
                         result = "{\"hasSolution\": false}";
                     }
@@ -155,5 +142,21 @@ public class SpringController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    private @NotNull List<Hole> prepareNodes(@NotNull NodesModel dataModel) {
+        List<Hole> nodes = new ArrayList<>();
+        dataModel.getComputer().getLittleHole().forEach((e) -> nodes.add(
+                new LittleHole(e.getId(), e.getSeed())
+        ));
+
+        var bigHole = dataModel.getComputer().getBigHole();
+        nodes.add(new BigHole(bigHole.getId(), bigHole.getSeed()));
+
+        dataModel.getHuman().getLittleHole().forEach((e) -> nodes.add(
+                new LittleHole(e.getId(), e.getSeed())
+        ));
+
+        return nodes;
     }
 }

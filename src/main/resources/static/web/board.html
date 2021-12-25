@@ -485,22 +485,18 @@
         }
     }
 
-    //let valueCombination = undefined
-
     async function play() {
         checkAllHole()
         if (!hasWinner) {
             if (currentTurn === "computer") {
-                /*api.getCombination(pemain, komputer).then(
-                value => {
-                    if (value !== undefined) {
-                        // value is LittleHole
-                        simulate(value)
-                    } else {
-                        changeTurn()
-                    }
-                }
-            )*/
+
+                let data = await new Promise((resolve) => {
+                    dialogFunc("Informasi", "Sekarang, Kesempatan Komputer", () => {
+                        resolve("btnClosed")
+                    })
+                })
+                console.log(data)
+
                 const cLittleHole = komputer.littleHole
                 const model = {
                     "human": {
@@ -513,7 +509,7 @@
                     }
                 }
 
-                let data = await api.promised_fetch(api.link + "combination", JSON.stringify(model))
+                data = await api.promised_fetch(api.link + "combination", JSON.stringify(model))
 
                 let result = undefined
                 if (data.hasSolution) {
@@ -533,15 +529,7 @@
                 } else {
                     changeTurn()
                 }
-                /*dialogFunc("Informasi", "Sekarang, Kesempatan Komputer", () => {
-                console.log(valueCombination)
-                if (valueCombination !== undefined) {
-                    // value is LittleHole
-                    simulate(valueCombination)
-                } else {
-                    changeTurn()
-                }
-            })*/
+
             } else {
                 // human turn
                 let seedLeft = 0
@@ -561,25 +549,18 @@
 
     canvas.addEventListener("click", (e) => {
         if (context.isPointInPath(p7Path, e.offsetX, e.offsetY)) {
-            console.log(p7)
             simulate(nodes[0])
         } else if (context.isPointInPath(p6Path, e.offsetX, e.offsetY)) {
-            console.log(p6)
             simulate(nodes[1])
         } else if (context.isPointInPath(p5Path, e.offsetX, e.offsetY)) {
-            console.log(p5)
             simulate(nodes[2])
         } else if (context.isPointInPath(p4Path, e.offsetX, e.offsetY)) {
-            console.log(p4)
             simulate(nodes[3])
         } else if (context.isPointInPath(p3Path, e.offsetX, e.offsetY)) {
-            console.log(p3)
             simulate(nodes[4])
         } else if (context.isPointInPath(p2Path, e.offsetX, e.offsetY)) {
-            console.log(p2)
             simulate(nodes[5])
         } else if (context.isPointInPath(p1Path, e.offsetX, e.offsetY)) {
-            console.log(p1)
             simulate(nodes[6])
         } else {
             console.log("unknown")
