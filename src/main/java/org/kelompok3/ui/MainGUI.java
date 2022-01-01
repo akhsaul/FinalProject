@@ -7,12 +7,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainGUI extends JFrame {
-    public MainGUI() {
+    public MainGUI(Component location){
         DBConnector.prepareAll();
-        Utils.initAudioPlayer();
+        //Utils.build(this, "Game Congklak", location, "background.png");
+        Utils.initPlayer();
         Utils.playSound();
         initComponents();
         initListener();
+    }
+    public MainGUI() {
+        this(null);
     }
 
     private void initListener() {
@@ -33,7 +37,7 @@ public class MainGUI extends JFrame {
 
 
     private void initComponents() {
-        setContentPane(Utils.getBackgroundImg("background.png"));
+        setContentPane(Utils.getBackground("background.png"));
         label = new JLabel();
         playBtn = new JButton();
         infoBtn = new JButton();
@@ -109,7 +113,7 @@ public class MainGUI extends JFrame {
         setLocationRelativeTo(null);
 
         setTitle("Game Congklak");
-        setIconImage(Utils.getImgRes("assets/icon.png"));
+        setIconImage(Utils.getImage("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }

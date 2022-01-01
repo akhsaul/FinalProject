@@ -1,5 +1,6 @@
 package org.kelompok3.ui;
 
+import org.kelompok3.KFrame;
 import org.kelompok3.Utils;
 import org.kelompok3.server.ServerApp;
 import org.springframework.boot.SpringApplication;
@@ -7,29 +8,27 @@ import org.springframework.boot.SpringApplication;
 import javax.swing.*;
 import java.awt.*;
 
-public class Launcher extends JFrame {
+public class Launcher extends KFrame {
     public Launcher() {
         initComponents();
+        Utils.build(this, "Peluncur Aplikasi", "");
         initListener();
     }
 
     public static void main(String[] args) {
-        Utils.initTheme();
-        new Launcher();
+        Utils.initTheme(Launcher::new);
     }
 
     private void initListener() {
         desktop.addActionListener(e -> {
-            new MainGUI();
+            new MainGUI(this);
             this.dispose();
         });
         web.addActionListener(e -> {
             if (Desktop.isDesktopSupported()) {
                 try {
                     SpringApplication.run(ServerApp.class);
-                    var url = "http://127.0.0.1:8080/congklak";
-                    //Desktop.getDesktop().browse(new URI(url));
-                    Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url).waitFor();
+                    Utils.openBrowser("http://127.0.0.1:8080/congklak");
                     this.dispose();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -83,13 +82,14 @@ public class Launcher extends JFrame {
                                 .addContainerGap(52, Short.MAX_VALUE))
         );
         setSize(400, 300);
-        setLocationRelativeTo(null);
 
+        /*
         setTitle("Peluncur Aplikasi");
         setIconImage(Utils.getImgRes("assets/icon.png"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
+        */
     }
 
     private JLabel label1;

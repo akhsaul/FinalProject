@@ -1,30 +1,8 @@
 package org.kelompok3;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.kelompok3.core.State;
-import org.springframework.util.ResourceUtils;
-import uk.co.caprica.vlcj.player.base.MediaPlayer;
-import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
-import uk.co.caprica.vlcj.player.component.AudioPlayerComponent;
+import java.util.Scanner;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-
+/*
 @SuppressWarnings("unused")
 public final class Utils {
     private static LookAndFeel theme = null;
@@ -59,10 +37,12 @@ public final class Utils {
         // throw error if null
         return notNull(url);
     }
+ */
 
     /**
      * @return Image or null
      */
+    /*
     public static BufferedImage getImgRes(String path) {
         BufferedImage img = null;
         try {
@@ -219,8 +199,4 @@ public final class Utils {
                 null, null, null);
     }
 }
-
-
-
-
-
+*/
