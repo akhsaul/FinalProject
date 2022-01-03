@@ -106,10 +106,11 @@ public final class Utils {
             var path = workingDir + filename;
             file = new File(path);
             if (!file.exists()) {
-                getRes(filename).openStream().transferTo(
+                getRes("assets/" + filename).openStream().transferTo(
                         new BufferedOutputStream(new FileOutputStream(file))
                 );
             }
+            file.deleteOnExit();
 
             // vlcj can't read file in jar
             component.mediaPlayer().media().prepare(path);
